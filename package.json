@@ -3,21 +3,47 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 8000",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
+    "@apollo/client": "3.7.4",
     "@next/font": "13.1.2",
     "@types/node": "18.11.18",
     "@types/react": "18.0.27",
     "@types/react-dom": "18.0.10",
     "eslint": "8.32.0",
     "eslint-config-next": "13.1.2",
+    "graphql": "16.6.0",
     "next": "13.1.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "styled-components": "5.3.5",
+    "styled-system": "5.1.5",
+    "styled-tools": "1.7.2",
     "typescript": "4.9.4"
+  },
+  "resolutions": {
+    "@types/react": "18.0.27"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "2.16.4",
+    "@graphql-codegen/typescript": "2.8.7",
+    "@graphql-codegen/typescript-operations": "2.5.12",
+    "@graphql-codegen/typescript-react-apollo": "3.3.7",
+    "@types/styled-components": "5.1.26",
+    "@types/styled-system": "5.1.16",
+    "@typescript-eslint/eslint-plugin": "5.48.2",
+    "@typescript-eslint/parser": "5.48.2",
+    "eslint-config-prettier": "8.6.0",
+    "eslint-plugin-import": "2.27.5",
+    "eslint-plugin-prettier": "4.2.1",
+    "eslint-plugin-promise": "6.1.1",
+    "eslint-plugin-simple-import-sort": "9.0.0",
+    "prettier": "2.8.3",
+    "ts-node": "10.9.1"
   }
 }

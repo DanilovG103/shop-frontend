@@ -1,0 +1,15 @@
+{
+  "name": "React-GraphQl",
+  "schemaPath": "http://localhost:3000/api/graphql",
+  "extensions": {
+    "endpoints": {
+      "Default Graphql Endpoint": {
+        "uri": "http://localhost:3000/api/graphql",
+        "headers": {
+          "user-agent": "JS GraphQl"
+        },
+        "introspect": false
+      }
+    }
+  }
+}
