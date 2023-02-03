@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 import { Box, Good, Layout } from 'src/components'
-import { OrderDirection } from 'src/generated/graphql'
+import { GoodCategoryType } from 'src/generated/graphql'
 import { useGoods } from 'src/hooks'
 
 const CardContainer = styled(Box)`
@@ -12,18 +12,18 @@ const CardContainer = styled(Box)`
   margin-top: 20px;
 `
 
-export default function Home() {
-  const { data, loading, total } = useGoods({
-    orderBy: {
-      createdAt: OrderDirection.Desc,
+export default function Page() {
+  const { data, total } = useGoods({
+    where: {
+      category: { equals: GoodCategoryType.Male },
     },
   })
 
   return (
-    <Layout title="Новинки">
+    <Layout title="Мужская одежда">
       <CardContainer>
-        {data?.map((good) => (
-          <Good key={good.id} good={good} />
+        {data?.map((item) => (
+          <Good key={item.id} good={item} />
         ))}
       </CardContainer>
     </Layout>

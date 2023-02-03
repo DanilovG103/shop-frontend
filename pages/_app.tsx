@@ -1,12 +1,19 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
+import { Inter } from '@next/font/google'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'styled-components'
 
 import { GlobalStyles, theme } from 'src/theme'
+import { env } from 'src/utils'
 
 const client = new ApolloClient({
   cache: new InMemoryCache({}),
-  uri: process.env.BASE_URL,
+  uri: env.uri,
+})
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
 })
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -14,7 +21,9 @@ export default function App({ Component, pageProps }: AppProps) {
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
         <GlobalStyles />
-        <Component {...pageProps} />
+        <main className={inter.className}>
+          <Component {...pageProps} />
+        </main>
       </ThemeProvider>
     </ApolloProvider>
   )

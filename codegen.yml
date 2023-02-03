@@ -1,5 +1,5 @@
 overwrite: true
-schema: 'http://localhost:3000/api/graphql'
+schema: 'http://localhost:8000/api/graphql'
 documents: './src/graphql/**/*.ts'
 generates:
   src/generated/graphql.tsx:
@@ -9,4 +9,4 @@ generates:
       - 'typescript-react-apollo'
     config:
       maybeValue: T
-      avoidOptionals: true
+      avoidOptionals: false
