@@ -1,10 +1,11 @@
 import React from 'react'
+import { IconButton } from '@material-ui/core'
 import Head from 'next/head'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
-import { useBrandsQuery } from 'src/generated/graphql'
 import { Route } from 'src/utils'
 
 import { Box } from './box'
@@ -14,6 +15,7 @@ import { Text } from './text'
 interface Props {
   title: string
   children: React.ReactNode
+  withBrands?: boolean
 }
 
 const routes = [
@@ -43,7 +45,7 @@ const Links = styled.ul`
   align-items: center;
 `
 
-export const Layout = ({ title, children }: Props) => {
+export const Layout = ({ title, children, withBrands = true }: Props) => {
   const { pathname } = useRouter()
 
   return (
@@ -78,11 +80,17 @@ export const Layout = ({ title, children }: Props) => {
               </li>
             ))}
           </Links>
-          <Box width={120} />
+          <Box width={120}>
+            <Link href={Route.basket}>
+              <IconButton>
+                <Image src="cart.svg" width={24} height={24} alt="cart" />
+              </IconButton>
+            </Link>
+          </Box>
         </Box>
       </Box>
       <Box display="flex" p="32px">
-        <BrandsAside />
+        {withBrands && <BrandsAside />}
         <Box width="100%" maxWidth={['1140px']}>
           <Text>{title}</Text>
           {children}

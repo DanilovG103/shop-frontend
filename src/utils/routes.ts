@@ -3,4 +3,5 @@ export enum Route {
   men = '/men',
   women = '/women',
   kids = '/kids',
+  basket = 'basket',
 }

@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T;
@@ -709,20 +708,6 @@ export type NestedStringFilter = {
   startsWith?: InputMaybe<Scalars['String']>;
 };
 
-export type NestedStringNullableFilter = {
-  contains?: InputMaybe<Scalars['String']>;
-  endsWith?: InputMaybe<Scalars['String']>;
-  equals?: InputMaybe<Scalars['String']>;
-  gt?: InputMaybe<Scalars['String']>;
-  gte?: InputMaybe<Scalars['String']>;
-  in?: InputMaybe<Array<Scalars['String']>>;
-  lt?: InputMaybe<Scalars['String']>;
-  lte?: InputMaybe<Scalars['String']>;
-  not?: InputMaybe<NestedStringNullableFilter>;
-  notIn?: InputMaybe<Array<Scalars['String']>>;
-  startsWith?: InputMaybe<Scalars['String']>;
-};
-
 export enum OrderDirection {
   Asc = 'asc',
   Desc = 'desc'
@@ -875,19 +860,32 @@ export type Request = {
   data?: Maybe<Basket>;
   id: Scalars['ID'];
   rejectReason?: Maybe<Scalars['String']>;
-  status?: Maybe<Scalars['String']>;
+  status?: Maybe<RequestStatusType>;
 };
 
 export type RequestCreateInput = {
   data?: InputMaybe<BasketRelateToOneForCreateInput>;
   rejectReason?: InputMaybe<Scalars['String']>;
-  status?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<RequestStatusType>;
 };
 
 export type RequestOrderByInput = {
   id?: InputMaybe<OrderDirection>;
   rejectReason?: InputMaybe<OrderDirection>;
   status?: InputMaybe<OrderDirection>;
+};
+
+export enum RequestStatusType {
+  Fulfilled = 'FULFILLED',
+  Pending = 'PENDING',
+  Rejected = 'REJECTED'
+}
+
+export type RequestStatusTypeNullableFilter = {
+  equals?: InputMaybe<RequestStatusType>;
+  in?: InputMaybe<Array<RequestStatusType>>;
+  not?: InputMaybe<RequestStatusTypeNullableFilter>;
+  notIn?: InputMaybe<Array<RequestStatusType>>;
 };
 
 export type RequestUpdateArgs = {
@@ -898,7 +896,7 @@ export type RequestUpdateArgs = {
 export type RequestUpdateInput = {
   data?: InputMaybe<BasketRelateToOneForUpdateInput>;
   rejectReason?: InputMaybe<Scalars['String']>;
-  status?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<RequestStatusType>;
 };
 
 export type RequestWhereInput = {
@@ -908,7 +906,7 @@ export type RequestWhereInput = {
   data?: InputMaybe<BasketWhereInput>;
   id?: InputMaybe<IdFilter>;
   rejectReason?: InputMaybe<StringFilter>;
-  status?: InputMaybe<StringNullableFilter>;
+  status?: InputMaybe<RequestStatusTypeNullableFilter>;
 };
 
 export type RequestWhereUniqueInput = {
@@ -925,20 +923,6 @@ export type StringFilter = {
   lt?: InputMaybe<Scalars['String']>;
   lte?: InputMaybe<Scalars['String']>;
   not?: InputMaybe<NestedStringFilter>;
-  notIn?: InputMaybe<Array<Scalars['String']>>;
-  startsWith?: InputMaybe<Scalars['String']>;
-};
-
-export type StringNullableFilter = {
-  contains?: InputMaybe<Scalars['String']>;
-  endsWith?: InputMaybe<Scalars['String']>;
-  equals?: InputMaybe<Scalars['String']>;
-  gt?: InputMaybe<Scalars['String']>;
-  gte?: InputMaybe<Scalars['String']>;
-  in?: InputMaybe<Array<Scalars['String']>>;
-  lt?: InputMaybe<Scalars['String']>;
-  lte?: InputMaybe<Scalars['String']>;
-  not?: InputMaybe<NestedStringNullableFilter>;
   notIn?: InputMaybe<Array<Scalars['String']>>;
   startsWith?: InputMaybe<Scalars['String']>;
 };
@@ -1022,6 +1006,8 @@ export type BrandsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type BrandsQuery = { __typename?: 'Query', brands?: Array<{ __typename?: 'Brand', id: string, title?: string }> };
 
+export type GoodsFragment = { __typename?: 'Good', id: string, title?: string, price?: number, brand?: { __typename?: 'Brand', title?: string }, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', id: string, url: string } }> };
+
 export type GoodsQueryVariables = Exact<{
   where?: GoodWhereInput;
   orderBy?: Array<GoodOrderByInput> | GoodOrderByInput;
@@ -1032,12 +1018,34 @@ export type GoodsQueryVariables = Exact<{
 
 export type GoodsQuery = { __typename?: 'Query', goods?: Array<{ __typename?: 'Good', id: string, title?: string, price?: number, brand?: { __typename?: 'Brand', title?: string }, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', id: string, url: string } }> }> };
 
+export type GoodQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GoodQuery = { __typename?: 'Query', good?: { __typename?: 'Good', description?: string, id: string, title?: string, price?: number, brand?: { __typename?: 'Brand', title?: string }, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', id: string, url: string } }> } };
+
 export type GoodsCountQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GoodsCountQuery = { __typename?: 'Query', goodsCount?: number };
 
-
+export const GoodsFragmentDoc = gql`
+    fragment goods on Good {
+  id
+  title
+  price
+  brand {
+    title
+  }
+  images {
+    image {
+      id
+      url
+    }
+  }
+}
+    `;
 export const BrandsDocument = gql`
     query Brands {
   brands {
@@ -1076,21 +1084,10 @@ export type BrandsQueryResult = Apollo.QueryResult<BrandsQuery, BrandsQueryVaria
 export const GoodsDocument = gql`
     query Goods($where: GoodWhereInput! = {}, $orderBy: [GoodOrderByInput!]! = [], $take: Int, $skip: Int! = 0) {
   goods(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
-    id
-    title
-    price
-    brand {
-      title
-    }
-    images {
-      image {
-        id
-        url
-      }
-    }
+    ...goods
   }
 }
-    `;
+    ${GoodsFragmentDoc}`;
 
 /**
  * __useGoodsQuery__
@@ -1122,6 +1119,42 @@ export function useGoodsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Good
 export type GoodsQueryHookResult = ReturnType<typeof useGoodsQuery>;
 export type GoodsLazyQueryHookResult = ReturnType<typeof useGoodsLazyQuery>;
 export type GoodsQueryResult = Apollo.QueryResult<GoodsQuery, GoodsQueryVariables>;
+export const GoodDocument = gql`
+    query Good($id: ID!) {
+  good(where: {id: $id}) {
+    ...goods
+    description
+  }
+}
+    ${GoodsFragmentDoc}`;
+
+/**
+ * __useGoodQuery__
+ *
+ * To run a query within a React component, call `useGoodQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGoodQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGoodQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGoodQuery(baseOptions: Apollo.QueryHookOptions<GoodQuery, GoodQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GoodQuery, GoodQueryVariables>(GoodDocument, options);
+      }
+export function useGoodLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GoodQuery, GoodQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GoodQuery, GoodQueryVariables>(GoodDocument, options);
+        }
+export type GoodQueryHookResult = ReturnType<typeof useGoodQuery>;
+export type GoodLazyQueryHookResult = ReturnType<typeof useGoodLazyQuery>;
+export type GoodQueryResult = Apollo.QueryResult<GoodQuery, GoodQueryVariables>;
 export const GoodsCountDocument = gql`
     query GoodsCount {
   goodsCount

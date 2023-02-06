@@ -1,8 +1,12 @@
+import 'react-toastify/dist/ReactToastify.min.css'
+
+import { ToastContainer } from 'react-toastify'
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 import { Inter } from '@next/font/google'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'styled-components'
 
+import { BasketProvider, FilterProvider } from 'src/context'
 import { GlobalStyles, theme } from 'src/theme'
 import { env } from 'src/utils'
 
@@ -21,9 +25,14 @@ export default function App({ Component, pageProps }: AppProps) {
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
         <GlobalStyles />
-        <main className={inter.className}>
-          <Component {...pageProps} />
-        </main>
+        <FilterProvider>
+          <BasketProvider>
+            <main className={inter.className}>
+              <Component {...pageProps} />
+            </main>
+            <ToastContainer />
+          </BasketProvider>
+        </FilterProvider>
       </ThemeProvider>
     </ApolloProvider>
   )

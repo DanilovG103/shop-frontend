@@ -1,6 +1,24 @@
 import { gql } from '@apollo/client'
 
+const goodsFragment = gql`
+  fragment goods on Good {
+    id
+    title
+    price
+    brand {
+      title
+    }
+    images {
+      image {
+        id
+        url
+      }
+    }
+  }
+`
+
 const getGoods = gql`
+  ${goodsFragment}
   query Goods(
     $where: GoodWhereInput! = {}
     $orderBy: [GoodOrderByInput!]! = []
@@ -8,18 +26,17 @@ const getGoods = gql`
     $skip: Int! = 0
   ) {
     goods(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
-      id
-      title
-      price
-      brand {
-        title
-      }
-      images {
-        image {
-          id
-          url
-        }
-      }
+      ...goods
+    }
+  }
+`
+
+const getGoodById = gql`
+  ${goodsFragment}
+  query Good($id: ID!) {
+    good(where: { id: $id }) {
+      ...goods
+      description
     }
   }
 `
@@ -29,5 +46,3 @@ const getGoodsCount = gql`
     goodsCount
   }
 `
-
-export { getGoods, getGoodsCount }
