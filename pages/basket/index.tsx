@@ -4,21 +4,15 @@ import { useBasketContext } from 'src/context'
 export default function BasketPage() {
   const { goods } = useBasketContext()
 
-  if (!goods.length) {
-    return (
-      <Layout title="Корзина" withBrands={false}>
+  return (
+    <Layout title="Корзина" withBrands={false}>
+      {goods.length ? (
+        goods.map((item) => <Good key={item.id} good={item} />)
+      ) : (
         <Box>
           <Text>Корзина пуста</Text>
         </Box>
-      </Layout>
-    )
-  }
-
-  return (
-    <Layout title="Корзина" withBrands={false}>
-      {goods.map((item) => (
-        <Good key={item.id} good={item} />
-      ))}
+      )}
     </Layout>
   )
 }

@@ -42,7 +42,7 @@ const getGoodById = gql`
 `
 
 const getGoodsCount = gql`
-  query GoodsCount {
-    goodsCount
+  query GoodsCount($where: GoodWhereInput = {}) {
+    goodsCount(where: $where)
   }
 `

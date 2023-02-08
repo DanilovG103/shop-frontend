@@ -25,6 +25,7 @@ export type Basket = {
   goods?: Maybe<Array<Good>>;
   goodsCount?: Maybe<Scalars['Int']>;
   id: Scalars['ID'];
+  sum?: Maybe<Scalars['Int']>;
   user?: Maybe<User>;
 };
 
@@ -1001,6 +1002,21 @@ export type UserWhereUniqueInput = {
   id?: InputMaybe<Scalars['ID']>;
 };
 
+export type AuthMutationVariables = Exact<{
+  email: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+
+export type AuthMutation = { __typename?: 'Mutation', authenticateUserWithPassword?: { __typename?: 'UserAuthenticationWithPasswordFailure', message: string } | { __typename?: 'UserAuthenticationWithPasswordSuccess', sessionToken: string } };
+
+export type RegistrationMutationVariables = Exact<{
+  data: UserCreateInput;
+}>;
+
+
+export type RegistrationMutation = { __typename?: 'Mutation', createUser?: { __typename?: 'User', id: string } };
+
 export type BrandsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1025,7 +1041,9 @@ export type GoodQueryVariables = Exact<{
 
 export type GoodQuery = { __typename?: 'Query', good?: { __typename?: 'Good', description?: string, id: string, title?: string, price?: number, brand?: { __typename?: 'Brand', title?: string }, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', id: string, url: string } }> } };
 
-export type GoodsCountQueryVariables = Exact<{ [key: string]: never; }>;
+export type GoodsCountQueryVariables = Exact<{
+  where?: InputMaybe<GoodWhereInput>;
+}>;
 
 
 export type GoodsCountQuery = { __typename?: 'Query', goodsCount?: number };
@@ -1046,6 +1064,78 @@ export const GoodsFragmentDoc = gql`
   }
 }
     `;
+export const AuthDocument = gql`
+    mutation Auth($email: String!, $password: String!) {
+  authenticateUserWithPassword(email: $email, password: $password) {
+    ... on UserAuthenticationWithPasswordSuccess {
+      sessionToken
+    }
+    ... on UserAuthenticationWithPasswordFailure {
+      message
+    }
+  }
+}
+    `;
+export type AuthMutationFn = Apollo.MutationFunction<AuthMutation, AuthMutationVariables>;
+
+/**
+ * __useAuthMutation__
+ *
+ * To run a mutation, you first call `useAuthMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAuthMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [authMutation, { data, loading, error }] = useAuthMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useAuthMutation(baseOptions?: Apollo.MutationHookOptions<AuthMutation, AuthMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AuthMutation, AuthMutationVariables>(AuthDocument, options);
+      }
+export type AuthMutationHookResult = ReturnType<typeof useAuthMutation>;
+export type AuthMutationResult = Apollo.MutationResult<AuthMutation>;
+export type AuthMutationOptions = Apollo.BaseMutationOptions<AuthMutation, AuthMutationVariables>;
+export const RegistrationDocument = gql`
+    mutation Registration($data: UserCreateInput!) {
+  createUser(data: $data) {
+    id
+  }
+}
+    `;
+export type RegistrationMutationFn = Apollo.MutationFunction<RegistrationMutation, RegistrationMutationVariables>;
+
+/**
+ * __useRegistrationMutation__
+ *
+ * To run a mutation, you first call `useRegistrationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRegistrationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [registrationMutation, { data, loading, error }] = useRegistrationMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useRegistrationMutation(baseOptions?: Apollo.MutationHookOptions<RegistrationMutation, RegistrationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RegistrationMutation, RegistrationMutationVariables>(RegistrationDocument, options);
+      }
+export type RegistrationMutationHookResult = ReturnType<typeof useRegistrationMutation>;
+export type RegistrationMutationResult = Apollo.MutationResult<RegistrationMutation>;
+export type RegistrationMutationOptions = Apollo.BaseMutationOptions<RegistrationMutation, RegistrationMutationVariables>;
 export const BrandsDocument = gql`
     query Brands {
   brands {
@@ -1156,8 +1246,8 @@ export type GoodQueryHookResult = ReturnType<typeof useGoodQuery>;
 export type GoodLazyQueryHookResult = ReturnType<typeof useGoodLazyQuery>;
 export type GoodQueryResult = Apollo.QueryResult<GoodQuery, GoodQueryVariables>;
 export const GoodsCountDocument = gql`
-    query GoodsCount {
-  goodsCount
+    query GoodsCount($where: GoodWhereInput = {}) {
+  goodsCount(where: $where)
 }
     `;
 
@@ -1173,6 +1263,7 @@ export const GoodsCountDocument = gql`
  * @example
  * const { data, loading, error } = useGoodsCountQuery({
  *   variables: {
+ *      where: // value for 'where'
  *   },
  * });
  */

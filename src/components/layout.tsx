@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { IconButton } from '@material-ui/core'
 import Head from 'next/head'
 import Image from 'next/image'
@@ -8,6 +8,7 @@ import styled from 'styled-components'
 
 import { Route } from 'src/utils'
 
+import { Auth } from './auth'
 import { Box } from './box'
 import { BrandsAside } from './brands-aside'
 import { Text } from './text'
@@ -47,6 +48,7 @@ const Links = styled.ul`
 
 export const Layout = ({ title, children, withBrands = true }: Props) => {
   const { pathname } = useRouter()
+  const [isAuthVisible, setIsAuthVisible] = useState(false)
 
   return (
     <>
@@ -86,6 +88,9 @@ export const Layout = ({ title, children, withBrands = true }: Props) => {
                 <Image src="cart.svg" width={24} height={24} alt="cart" />
               </IconButton>
             </Link>
+            <IconButton onClick={() => setIsAuthVisible(true)}>
+              <Image src="user.svg" width={24} height={24} alt="cart" />
+            </IconButton>
           </Box>
         </Box>
       </Box>
@@ -96,6 +101,7 @@ export const Layout = ({ title, children, withBrands = true }: Props) => {
           {children}
         </Box>
       </Box>
+      <Auth open={isAuthVisible} onClose={() => setIsAuthVisible(false)} />
     </>
   )
 }

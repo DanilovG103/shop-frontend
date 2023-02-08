@@ -38,7 +38,7 @@ export const Good = ({ good }: Props) => {
     <Link href={`/good/${good.id}`}>
       <Card className={styles.card}>
         <Image
-          src={good.images?.[0]?.image?.url ?? 'render thumbnail here'}
+          src={good.images?.[0]?.image?.url ?? ''}
           alt={'image'}
           width={200}
           height={200}

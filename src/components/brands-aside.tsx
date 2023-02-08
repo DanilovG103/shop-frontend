@@ -8,7 +8,7 @@ import { Box } from './box'
 import { Text } from './text'
 
 export const BrandsAside = () => {
-  const { data: brands, loading: brandsLoading } = useBrandsQuery()
+  const { data: brands } = useBrandsQuery()
   const { brandsIds, setBrandsIds } = useFilterContext()
 
   return (
