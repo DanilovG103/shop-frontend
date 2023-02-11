@@ -143,6 +143,59 @@ export type DateTimeNullableFilter = {
   notIn?: InputMaybe<Array<Scalars['DateTime']>>;
 };
 
+export type Favorite = {
+  __typename?: 'Favorite';
+  goods?: Maybe<Array<Good>>;
+  goodsCount?: Maybe<Scalars['Int']>;
+  id: Scalars['ID'];
+  user?: Maybe<User>;
+};
+
+
+export type FavoriteGoodsArgs = {
+  orderBy?: Array<GoodOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: GoodWhereInput;
+};
+
+
+export type FavoriteGoodsCountArgs = {
+  where?: GoodWhereInput;
+};
+
+export type FavoriteCreateInput = {
+  goods?: InputMaybe<GoodRelateToManyForCreateInput>;
+  user?: InputMaybe<UserRelateToOneForCreateInput>;
+};
+
+export type FavoriteOrderByInput = {
+  id?: InputMaybe<OrderDirection>;
+};
+
+export type FavoriteUpdateArgs = {
+  data: FavoriteUpdateInput;
+  where: FavoriteWhereUniqueInput;
+};
+
+export type FavoriteUpdateInput = {
+  goods?: InputMaybe<GoodRelateToManyForUpdateInput>;
+  user?: InputMaybe<UserRelateToOneForUpdateInput>;
+};
+
+export type FavoriteWhereInput = {
+  AND?: InputMaybe<Array<FavoriteWhereInput>>;
+  NOT?: InputMaybe<Array<FavoriteWhereInput>>;
+  OR?: InputMaybe<Array<FavoriteWhereInput>>;
+  goods?: InputMaybe<GoodManyRelationFilter>;
+  id?: InputMaybe<IdFilter>;
+  user?: InputMaybe<UserWhereInput>;
+};
+
+export type FavoriteWhereUniqueInput = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
 export type Good = {
   __typename?: 'Good';
   brand?: Maybe<Brand>;
@@ -152,6 +205,7 @@ export type Good = {
   id: Scalars['ID'];
   images?: Maybe<Array<Image>>;
   imagesCount?: Maybe<Scalars['Int']>;
+  isInBasket?: Maybe<Scalars['Boolean']>;
   price?: Maybe<Scalars['Int']>;
   title?: Maybe<Scalars['String']>;
 };
@@ -468,6 +522,8 @@ export type Mutation = {
   createBaskets?: Maybe<Array<Maybe<Basket>>>;
   createBrand?: Maybe<Brand>;
   createBrands?: Maybe<Array<Maybe<Brand>>>;
+  createFavorite?: Maybe<Favorite>;
+  createFavorites?: Maybe<Array<Maybe<Favorite>>>;
   createGood?: Maybe<Good>;
   createGoods?: Maybe<Array<Maybe<Good>>>;
   createImage?: Maybe<Image>;
@@ -480,6 +536,8 @@ export type Mutation = {
   deleteBaskets?: Maybe<Array<Maybe<Basket>>>;
   deleteBrand?: Maybe<Brand>;
   deleteBrands?: Maybe<Array<Maybe<Brand>>>;
+  deleteFavorite?: Maybe<Favorite>;
+  deleteFavorites?: Maybe<Array<Maybe<Favorite>>>;
   deleteGood?: Maybe<Good>;
   deleteGoods?: Maybe<Array<Maybe<Good>>>;
   deleteImage?: Maybe<Image>;
@@ -489,10 +547,13 @@ export type Mutation = {
   deleteUser?: Maybe<User>;
   deleteUsers?: Maybe<Array<Maybe<User>>>;
   endSession: Scalars['Boolean'];
+  registration?: Maybe<UserAuthenticationWithPasswordResult>;
   updateBasket?: Maybe<Basket>;
   updateBaskets?: Maybe<Array<Maybe<Basket>>>;
   updateBrand?: Maybe<Brand>;
   updateBrands?: Maybe<Array<Maybe<Brand>>>;
+  updateFavorite?: Maybe<Favorite>;
+  updateFavorites?: Maybe<Array<Maybe<Favorite>>>;
   updateGood?: Maybe<Good>;
   updateGoods?: Maybe<Array<Maybe<Good>>>;
   updateImage?: Maybe<Image>;
@@ -527,6 +588,16 @@ export type MutationCreateBrandArgs = {
 
 export type MutationCreateBrandsArgs = {
   data: Array<BrandCreateInput>;
+};
+
+
+export type MutationCreateFavoriteArgs = {
+  data: FavoriteCreateInput;
+};
+
+
+export type MutationCreateFavoritesArgs = {
+  data: Array<FavoriteCreateInput>;
 };
 
 
@@ -590,6 +661,16 @@ export type MutationDeleteBrandsArgs = {
 };
 
 
+export type MutationDeleteFavoriteArgs = {
+  where: FavoriteWhereUniqueInput;
+};
+
+
+export type MutationDeleteFavoritesArgs = {
+  where: Array<FavoriteWhereUniqueInput>;
+};
+
+
 export type MutationDeleteGoodArgs = {
   where: GoodWhereUniqueInput;
 };
@@ -630,6 +711,13 @@ export type MutationDeleteUsersArgs = {
 };
 
 
+export type MutationRegistrationArgs = {
+  email: Scalars['String'];
+  name: Scalars['String'];
+  password: Scalars['String'];
+};
+
+
 export type MutationUpdateBasketArgs = {
   data: BasketUpdateInput;
   where: BasketWhereUniqueInput;
@@ -649,6 +737,17 @@ export type MutationUpdateBrandArgs = {
 
 export type MutationUpdateBrandsArgs = {
   data: Array<BrandUpdateArgs>;
+};
+
+
+export type MutationUpdateFavoriteArgs = {
+  data: FavoriteUpdateInput;
+  where: FavoriteWhereUniqueInput;
+};
+
+
+export type MutationUpdateFavoritesArgs = {
+  data: Array<FavoriteUpdateArgs>;
 };
 
 
@@ -728,6 +827,9 @@ export type Query = {
   brand?: Maybe<Brand>;
   brands?: Maybe<Array<Brand>>;
   brandsCount?: Maybe<Scalars['Int']>;
+  favorite?: Maybe<Favorite>;
+  favorites?: Maybe<Array<Favorite>>;
+  favoritesCount?: Maybe<Scalars['Int']>;
   good?: Maybe<Good>;
   goods?: Maybe<Array<Good>>;
   goodsCount?: Maybe<Scalars['Int']>;
@@ -777,6 +879,24 @@ export type QueryBrandsArgs = {
 
 export type QueryBrandsCountArgs = {
   where?: BrandWhereInput;
+};
+
+
+export type QueryFavoriteArgs = {
+  where: FavoriteWhereUniqueInput;
+};
+
+
+export type QueryFavoritesArgs = {
+  orderBy?: Array<FavoriteOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: FavoriteWhereInput;
+};
+
+
+export type QueryFavoritesCountArgs = {
+  where?: FavoriteWhereInput;
 };
 
 
@@ -930,8 +1050,10 @@ export type StringFilter = {
 
 export type User = {
   __typename?: 'User';
+  basketId?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   email?: Maybe<Scalars['String']>;
+  favoritesId?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
   password?: Maybe<PasswordState>;
@@ -951,15 +1073,19 @@ export type UserAuthenticationWithPasswordSuccess = {
 };
 
 export type UserCreateInput = {
+  basketId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   email?: InputMaybe<Scalars['String']>;
+  favoritesId?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   password?: InputMaybe<Scalars['String']>;
 };
 
 export type UserOrderByInput = {
+  basketId?: InputMaybe<OrderDirection>;
   createdAt?: InputMaybe<OrderDirection>;
   email?: InputMaybe<OrderDirection>;
+  favoritesId?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
   name?: InputMaybe<OrderDirection>;
 };
@@ -981,8 +1107,10 @@ export type UserUpdateArgs = {
 };
 
 export type UserUpdateInput = {
+  basketId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   email?: InputMaybe<Scalars['String']>;
+  favoritesId?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   password?: InputMaybe<Scalars['String']>;
 };
@@ -991,8 +1119,10 @@ export type UserWhereInput = {
   AND?: InputMaybe<Array<UserWhereInput>>;
   NOT?: InputMaybe<Array<UserWhereInput>>;
   OR?: InputMaybe<Array<UserWhereInput>>;
+  basketId?: InputMaybe<StringFilter>;
   createdAt?: InputMaybe<DateTimeNullableFilter>;
   email?: InputMaybe<StringFilter>;
+  favoritesId?: InputMaybe<StringFilter>;
   id?: InputMaybe<IdFilter>;
   name?: InputMaybe<StringFilter>;
 };
@@ -1002,27 +1132,31 @@ export type UserWhereUniqueInput = {
   id?: InputMaybe<Scalars['ID']>;
 };
 
+export type GoodsFragment = { __typename?: 'Good', id: string, title?: string, price?: number, brand?: { __typename?: 'Brand', title?: string }, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', id: string, url: string } }> };
+
+export type UserFragment = { __typename?: 'User', id: string, name?: string, email?: string, basketId?: string, favoritesId?: string };
+
 export type AuthMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
 }>;
 
 
-export type AuthMutation = { __typename?: 'Mutation', authenticateUserWithPassword?: { __typename?: 'UserAuthenticationWithPasswordFailure', message: string } | { __typename?: 'UserAuthenticationWithPasswordSuccess', sessionToken: string } };
+export type AuthMutation = { __typename?: 'Mutation', authenticateUserWithPassword?: { __typename?: 'UserAuthenticationWithPasswordFailure', message: string } | { __typename?: 'UserAuthenticationWithPasswordSuccess', sessionToken: string, item: { __typename?: 'User', id: string, name?: string, email?: string, basketId?: string, favoritesId?: string } } };
 
 export type RegistrationMutationVariables = Exact<{
-  data: UserCreateInput;
+  email: Scalars['String'];
+  password: Scalars['String'];
+  name: Scalars['String'];
 }>;
 
 
-export type RegistrationMutation = { __typename?: 'Mutation', createUser?: { __typename?: 'User', id: string } };
+export type RegistrationMutation = { __typename?: 'Mutation', registration?: { __typename?: 'UserAuthenticationWithPasswordFailure' } | { __typename?: 'UserAuthenticationWithPasswordSuccess', sessionToken: string, item: { __typename?: 'User', id: string, name?: string, email?: string, basketId?: string, favoritesId?: string } } };
 
 export type BrandsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type BrandsQuery = { __typename?: 'Query', brands?: Array<{ __typename?: 'Brand', id: string, title?: string }> };
-
-export type GoodsFragment = { __typename?: 'Good', id: string, title?: string, price?: number, brand?: { __typename?: 'Brand', title?: string }, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', id: string, url: string } }> };
 
 export type GoodsQueryVariables = Exact<{
   where?: GoodWhereInput;
@@ -1048,6 +1182,25 @@ export type GoodsCountQueryVariables = Exact<{
 
 export type GoodsCountQuery = { __typename?: 'Query', goodsCount?: number };
 
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = { __typename?: 'Query', authenticatedItem?: { __typename?: 'User', id: string, name?: string, email?: string, basketId?: string, favoritesId?: string } };
+
+export type BasketQueryVariables = Exact<{
+  where: BasketWhereUniqueInput;
+}>;
+
+
+export type BasketQuery = { __typename?: 'Query', basket?: { __typename?: 'Basket', goodsCount?: number, sum?: number, goods?: Array<{ __typename?: 'Good', id: string, title?: string, price?: number, brand?: { __typename?: 'Brand', title?: string }, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', id: string, url: string } }> }> } };
+
+export type FavoriteQueryVariables = Exact<{
+  where: FavoriteWhereUniqueInput;
+}>;
+
+
+export type FavoriteQuery = { __typename?: 'Query', favorite?: { __typename?: 'Favorite', goodsCount?: number, goods?: Array<{ __typename?: 'Good', id: string, title?: string, price?: number, brand?: { __typename?: 'Brand', title?: string }, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', id: string, url: string } }> }> } };
+
 export const GoodsFragmentDoc = gql`
     fragment goods on Good {
   id
@@ -1064,18 +1217,30 @@ export const GoodsFragmentDoc = gql`
   }
 }
     `;
+export const UserFragmentDoc = gql`
+    fragment user on User {
+  id
+  name
+  email
+  basketId
+  favoritesId
+}
+    `;
 export const AuthDocument = gql`
     mutation Auth($email: String!, $password: String!) {
   authenticateUserWithPassword(email: $email, password: $password) {
     ... on UserAuthenticationWithPasswordSuccess {
       sessionToken
+      item {
+        ...user
+      }
     }
     ... on UserAuthenticationWithPasswordFailure {
       message
     }
   }
 }
-    `;
+    ${UserFragmentDoc}`;
 export type AuthMutationFn = Apollo.MutationFunction<AuthMutation, AuthMutationVariables>;
 
 /**
@@ -1104,12 +1269,17 @@ export type AuthMutationHookResult = ReturnType<typeof useAuthMutation>;
 export type AuthMutationResult = Apollo.MutationResult<AuthMutation>;
 export type AuthMutationOptions = Apollo.BaseMutationOptions<AuthMutation, AuthMutationVariables>;
 export const RegistrationDocument = gql`
-    mutation Registration($data: UserCreateInput!) {
-  createUser(data: $data) {
-    id
+    mutation Registration($email: String!, $password: String!, $name: String!) {
+  registration(email: $email, name: $name, password: $password) {
+    ... on UserAuthenticationWithPasswordSuccess {
+      sessionToken
+      item {
+        ...user
+      }
+    }
   }
 }
-    `;
+    ${UserFragmentDoc}`;
 export type RegistrationMutationFn = Apollo.MutationFunction<RegistrationMutation, RegistrationMutationVariables>;
 
 /**
@@ -1125,7 +1295,9 @@ export type RegistrationMutationFn = Apollo.MutationFunction<RegistrationMutatio
  * @example
  * const [registrationMutation, { data, loading, error }] = useRegistrationMutation({
  *   variables: {
- *      data: // value for 'data'
+ *      email: // value for 'email'
+ *      password: // value for 'password'
+ *      name: // value for 'name'
  *   },
  * });
  */
@@ -1278,3 +1450,116 @@ export function useGoodsCountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GoodsCountQueryHookResult = ReturnType<typeof useGoodsCountQuery>;
 export type GoodsCountLazyQueryHookResult = ReturnType<typeof useGoodsCountLazyQuery>;
 export type GoodsCountQueryResult = Apollo.QueryResult<GoodsCountQuery, GoodsCountQueryVariables>;
+export const MeDocument = gql`
+    query Me {
+  authenticatedItem {
+    ... on User {
+      ...user
+    }
+  }
+}
+    ${UserFragmentDoc}`;
+
+/**
+ * __useMeQuery__
+ *
+ * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+      }
+export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+        }
+export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
+export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
+export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const BasketDocument = gql`
+    query Basket($where: BasketWhereUniqueInput!) {
+  basket(where: $where) {
+    goods {
+      ...goods
+    }
+    goodsCount
+    sum
+  }
+}
+    ${GoodsFragmentDoc}`;
+
+/**
+ * __useBasketQuery__
+ *
+ * To run a query within a React component, call `useBasketQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBasketQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBasketQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useBasketQuery(baseOptions: Apollo.QueryHookOptions<BasketQuery, BasketQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BasketQuery, BasketQueryVariables>(BasketDocument, options);
+      }
+export function useBasketLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BasketQuery, BasketQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BasketQuery, BasketQueryVariables>(BasketDocument, options);
+        }
+export type BasketQueryHookResult = ReturnType<typeof useBasketQuery>;
+export type BasketLazyQueryHookResult = ReturnType<typeof useBasketLazyQuery>;
+export type BasketQueryResult = Apollo.QueryResult<BasketQuery, BasketQueryVariables>;
+export const FavoriteDocument = gql`
+    query Favorite($where: FavoriteWhereUniqueInput!) {
+  favorite(where: $where) {
+    goods {
+      ...goods
+    }
+    goodsCount
+  }
+}
+    ${GoodsFragmentDoc}`;
+
+/**
+ * __useFavoriteQuery__
+ *
+ * To run a query within a React component, call `useFavoriteQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFavoriteQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFavoriteQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useFavoriteQuery(baseOptions: Apollo.QueryHookOptions<FavoriteQuery, FavoriteQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FavoriteQuery, FavoriteQueryVariables>(FavoriteDocument, options);
+      }
+export function useFavoriteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FavoriteQuery, FavoriteQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FavoriteQuery, FavoriteQueryVariables>(FavoriteDocument, options);
+        }
+export type FavoriteQueryHookResult = ReturnType<typeof useFavoriteQuery>;
+export type FavoriteLazyQueryHookResult = ReturnType<typeof useFavoriteLazyQuery>;
+export type FavoriteQueryResult = Apollo.QueryResult<FavoriteQuery, FavoriteQueryVariables>;

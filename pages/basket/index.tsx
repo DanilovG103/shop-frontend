@@ -1,8 +1,16 @@
 import { Box, Good, Layout, Text } from 'src/components'
-import { useBasketContext } from 'src/context'
+import { useBasketQuery } from 'src/generated/graphql'
 
 export default function BasketPage() {
-  const { goods } = useBasketContext()
+  const { data } = useBasketQuery({
+    variables: {
+      where: {
+        id: '',
+      },
+    },
+  })
+
+  const goods = data?.basket?.goods ?? []
 
   return (
     <Layout title="Корзина" withBrands={false}>

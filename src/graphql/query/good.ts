@@ -1,21 +1,6 @@
 import { gql } from '@apollo/client'
 
-const goodsFragment = gql`
-  fragment goods on Good {
-    id
-    title
-    price
-    brand {
-      title
-    }
-    images {
-      image {
-        id
-        url
-      }
-    }
-  }
-`
+import { goodsFragment } from '../fragments'
 
 const getGoods = gql`
   ${goodsFragment}

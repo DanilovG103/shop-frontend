@@ -1,10 +1,16 @@
 import { gql } from '@apollo/client'
 
+import { userFragment } from '../fragments'
+
 const auth = gql`
+  ${userFragment}
   mutation Auth($email: String!, $password: String!) {
     authenticateUserWithPassword(email: $email, password: $password) {
       ... on UserAuthenticationWithPasswordSuccess {
         sessionToken
+        item {
+          ...user
+        }
       }
 
       ... on UserAuthenticationWithPasswordFailure {
@@ -15,9 +21,15 @@ const auth = gql`
 `
 
 const register = gql`
-  mutation Registration($data: UserCreateInput!) {
-    createUser(data: $data) {
-      id
+  ${userFragment}
+  mutation Registration($email: String!, $password: String!, $name: String!) {
+    registration(email: $email, name: $name, password: $password) {
+      ... on UserAuthenticationWithPasswordSuccess {
+        sessionToken
+        item {
+          ...user
+        }
+      }
     }
   }
 `

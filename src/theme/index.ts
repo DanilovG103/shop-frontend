@@ -1,13 +1,9 @@
 import { createGlobalStyle } from 'styled-components'
 
-import { DarkColors, LightColors } from './colors'
-
-const isDark = false
-
-const colors = isDark ? DarkColors : LightColors
+import { Colors } from './colors'
 
 export const theme = {
-  colors,
+  colors: Colors,
 }
 
 export const GlobalStyles = createGlobalStyle`

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { IconButton } from '@material-ui/core'
 import Head from 'next/head'
 import Image from 'next/image'
@@ -6,9 +6,10 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
+import { useUserContext } from 'src/context'
 import { Route } from 'src/utils'
 
-import { Auth } from './auth'
+import { AuthModal } from './auth-modal'
 import { Box } from './box'
 import { BrandsAside } from './brands-aside'
 import { Text } from './text'
@@ -47,8 +48,17 @@ const Links = styled.ul`
 `
 
 export const Layout = ({ title, children, withBrands = true }: Props) => {
-  const { pathname } = useRouter()
+  const { user } = useUserContext()
+  const { pathname, push } = useRouter()
   const [isAuthVisible, setIsAuthVisible] = useState(false)
+
+  const onUserPress = useCallback(() => {
+    if (!user) {
+      return setIsAuthVisible(true)
+    }
+
+    return push(Route.me)
+  }, [push, user])
 
   return (
     <>
@@ -83,12 +93,10 @@ export const Layout = ({ title, children, withBrands = true }: Props) => {
             ))}
           </Links>
           <Box width={120}>
-            <Link href={Route.basket}>
-              <IconButton>
-                <Image src="cart.svg" width={24} height={24} alt="cart" />
-              </IconButton>
-            </Link>
-            <IconButton onClick={() => setIsAuthVisible(true)}>
+            <IconButton>
+              <Image src="cart.svg" width={24} height={24} alt="cart" />
+            </IconButton>
+            <IconButton onClick={onUserPress}>
               <Image src="user.svg" width={24} height={24} alt="cart" />
             </IconButton>
           </Box>
@@ -101,7 +109,7 @@ export const Layout = ({ title, children, withBrands = true }: Props) => {
           {children}
         </Box>
       </Box>
-      <Auth open={isAuthVisible} onClose={() => setIsAuthVisible(false)} />
+      <AuthModal open={isAuthVisible} onClose={() => setIsAuthVisible(false)} />
     </>
   )
 }
