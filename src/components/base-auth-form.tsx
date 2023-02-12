@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useEffect } from 'react'
 import { Button, makeStyles } from '@material-ui/core'
 import { useFormikContext } from 'formik'
 import styled from 'styled-components'
@@ -14,6 +14,7 @@ const Form = styled.form`
   height: 100%;
   flex-direction: column;
   margin-top: 20px;
+  width: 100%;
 `
 
 const useStyles = makeStyles({

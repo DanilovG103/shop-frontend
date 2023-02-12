@@ -14,5 +14,7 @@ export const goodsFragment = gql`
         url
       }
     }
+    isInBasket
+    isInFavorite
   }
 `

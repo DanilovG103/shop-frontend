@@ -1,11 +1,13 @@
 import { Box, Good, Layout, Text } from 'src/components'
+import { useUserContext } from 'src/context'
 import { useBasketQuery } from 'src/generated/graphql'
 
 export default function BasketPage() {
+  const { user } = useUserContext()
   const { data } = useBasketQuery({
     variables: {
       where: {
-        id: '',
+        id: user?.basketId,
       },
     },
   })

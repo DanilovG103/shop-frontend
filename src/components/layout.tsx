@@ -4,9 +4,10 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 
 import { useUserContext } from 'src/context'
+import { CartIcon, UserIcon } from 'src/icons'
 import { Route } from 'src/utils'
 
 import { AuthModal } from './auth-modal'
@@ -48,9 +49,17 @@ const Links = styled.ul`
 `
 
 export const Layout = ({ title, children, withBrands = true }: Props) => {
-  const { user } = useUserContext()
+  const { user, isAuthVisible, setIsAuthVisible } = useUserContext()
   const { pathname, push } = useRouter()
-  const [isAuthVisible, setIsAuthVisible] = useState(false)
+  const { colors } = useTheme()
+
+  const onCartPress = useCallback(() => {
+    if (!user) {
+      return setIsAuthVisible(true)
+    }
+
+    return push(Route.basket)
+  }, [push, setIsAuthVisible, user])
 
   const onUserPress = useCallback(() => {
     if (!user) {
@@ -58,7 +67,7 @@ export const Layout = ({ title, children, withBrands = true }: Props) => {
     }
 
     return push(Route.me)
-  }, [push, user])
+  }, [push, setIsAuthVisible, user])
 
   return (
     <>
@@ -93,11 +102,11 @@ export const Layout = ({ title, children, withBrands = true }: Props) => {
             ))}
           </Links>
           <Box width={120}>
-            <IconButton>
-              <Image src="cart.svg" width={24} height={24} alt="cart" />
+            <IconButton onClick={onCartPress}>
+              <CartIcon color={colors.icons.primary} />
             </IconButton>
             <IconButton onClick={onUserPress}>
-              <Image src="user.svg" width={24} height={24} alt="cart" />
+              <UserIcon color={colors.icons.primary} />
             </IconButton>
           </Box>
         </Box>

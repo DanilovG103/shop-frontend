@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { ApolloError } from '@apollo/client'
 import { Formik, FormikHelpers } from 'formik'
 
 import { useUserContext } from 'src/context'
@@ -75,7 +76,10 @@ export const AuthModal = ({ open, onClose }: Props) => {
         onClose()
         setUser(data.registration.item)
       }
-    } catch (error) {}
+    } catch (error) {
+      const err = error as ApolloError
+      helpers.setFieldError('email', err.message)
+    }
   }
 
   return (
@@ -104,8 +108,8 @@ export const AuthModal = ({ open, onClose }: Props) => {
             validationSchema={registrationSchema}
           />
         )}
-
         <Text
+          cursor="pointer"
           mt="16px"
           color="text_secondary"
           onClick={() => setIsAuth((prev) => !prev)}>

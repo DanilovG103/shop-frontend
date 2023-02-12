@@ -41,7 +41,7 @@ export default function App({ Component, pageProps }: AppProps) {
             <main className={inter.className}>
               <Component {...pageProps} />
             </main>
-            <ToastContainer />
+            <ToastContainer hideProgressBar autoClose={1500} />
           </FilterProvider>
         </ThemeProvider>
       </UserProvider>

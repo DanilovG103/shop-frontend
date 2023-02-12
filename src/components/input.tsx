@@ -6,6 +6,7 @@ const useStyles = makeStyles({
     '& .MuiFormHelperText-contained': {
       margin: '3px 0 0',
     },
+    width: '100%',
   },
 })
 

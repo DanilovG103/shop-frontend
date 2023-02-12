@@ -1,9 +1,9 @@
 import { createGlobalStyle } from 'styled-components'
 
-import { Colors } from './colors'
+import { colors } from './colors'
 
 export const theme = {
-  colors: Colors,
+  colors,
 }
 
 export const GlobalStyles = createGlobalStyle`

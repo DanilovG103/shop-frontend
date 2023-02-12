@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 
 import { Box, Text } from 'src/components'
 import { useGoodQuery } from 'src/generated/graphql'
+import { env } from 'src/utils'
 
 export default function CurrentGoodPage() {
   const { query } = useRouter()
@@ -15,7 +16,7 @@ export default function CurrentGoodPage() {
       {data?.good?.images?.map((item) => (
         <Image
           key={item.image?.id}
-          src={item.image?.url ?? ''}
+          src={env.image + item.image?.url ?? ''}
           alt="image"
           width={250}
           height={250}

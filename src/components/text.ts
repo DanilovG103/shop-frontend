@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { CSSProperties } from 'styled-components'
 import {
   color,
   ColorProps,
@@ -24,9 +24,12 @@ export type TextProps = ColorProps &
   PositionProps &
   TextStyleProps &
   TypographyProps &
-  ColorStyleProps
+  ColorStyleProps & {
+    cursor?: CSSProperties['cursor']
+  }
 
 export const Text = styled.p<TextProps>`
+  cursor: ${({ cursor }) => cursor ?? 'auto'};
   ${compose(
     color,
     space,

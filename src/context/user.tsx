@@ -17,23 +17,26 @@ type MaybeUser = User | null
 interface Values {
   user: MaybeUser
   setUser: Dispatch<SetStateAction<MaybeUser>>
+  isAuthVisible: boolean
+  setIsAuthVisible: Dispatch<SetStateAction<boolean>>
 }
 
 const initialValues: Values = {
   user: null,
   setUser: noop,
+  isAuthVisible: false,
+  setIsAuthVisible: noop,
 }
 
 const Context = createContext(initialValues)
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [getMeQuery] = useMeLazyQuery()
-
+  const [isAuthVisible, setIsAuthVisible] = useState(false)
   const [user, setUser] = useState<MaybeUser>(null)
 
   const getMe = useCallback(async () => {
     const { data } = await getMeQuery()
-
     if (!data?.authenticatedItem) return
 
     setUser(data.authenticatedItem)
@@ -47,8 +50,10 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     () => ({
       user,
       setUser,
+      isAuthVisible,
+      setIsAuthVisible,
     }),
-    [user],
+    [isAuthVisible, user],
   )
 
   return <Context.Provider value={value}>{children}</Context.Provider>

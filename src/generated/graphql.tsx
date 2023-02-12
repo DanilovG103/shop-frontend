@@ -206,6 +206,7 @@ export type Good = {
   images?: Maybe<Array<Image>>;
   imagesCount?: Maybe<Scalars['Int']>;
   isInBasket?: Maybe<Scalars['Boolean']>;
+  isInFavorite?: Maybe<Scalars['Boolean']>;
   price?: Maybe<Scalars['Int']>;
   title?: Maybe<Scalars['String']>;
 };
@@ -1132,9 +1133,25 @@ export type UserWhereUniqueInput = {
   id?: InputMaybe<Scalars['ID']>;
 };
 
-export type GoodsFragment = { __typename?: 'Good', id: string, title?: string, price?: number, brand?: { __typename?: 'Brand', title?: string }, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', id: string, url: string } }> };
+export type GoodsFragment = { __typename?: 'Good', id: string, title?: string, price?: number, isInBasket?: boolean, isInFavorite?: boolean, brand?: { __typename?: 'Brand', title?: string }, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', id: string, url: string } }> };
 
 export type UserFragment = { __typename?: 'User', id: string, name?: string, email?: string, basketId?: string, favoritesId?: string };
+
+export type FavoriteUpdateMutationVariables = Exact<{
+  where: FavoriteWhereUniqueInput;
+  data: FavoriteUpdateInput;
+}>;
+
+
+export type FavoriteUpdateMutation = { __typename?: 'Mutation', updateFavorite?: { __typename?: 'Favorite', id: string } };
+
+export type BasketUpdateMutationVariables = Exact<{
+  where: BasketWhereUniqueInput;
+  data: BasketUpdateInput;
+}>;
+
+
+export type BasketUpdateMutation = { __typename?: 'Mutation', updateBasket?: { __typename?: 'Basket', id: string } };
 
 export type AuthMutationVariables = Exact<{
   email: Scalars['String'];
@@ -1166,14 +1183,14 @@ export type GoodsQueryVariables = Exact<{
 }>;
 
 
-export type GoodsQuery = { __typename?: 'Query', goods?: Array<{ __typename?: 'Good', id: string, title?: string, price?: number, brand?: { __typename?: 'Brand', title?: string }, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', id: string, url: string } }> }> };
+export type GoodsQuery = { __typename?: 'Query', goods?: Array<{ __typename?: 'Good', id: string, title?: string, price?: number, isInBasket?: boolean, isInFavorite?: boolean, brand?: { __typename?: 'Brand', title?: string }, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', id: string, url: string } }> }> };
 
 export type GoodQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type GoodQuery = { __typename?: 'Query', good?: { __typename?: 'Good', description?: string, id: string, title?: string, price?: number, brand?: { __typename?: 'Brand', title?: string }, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', id: string, url: string } }> } };
+export type GoodQuery = { __typename?: 'Query', good?: { __typename?: 'Good', description?: string, id: string, title?: string, price?: number, isInBasket?: boolean, isInFavorite?: boolean, brand?: { __typename?: 'Brand', title?: string }, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', id: string, url: string } }> } };
 
 export type GoodsCountQueryVariables = Exact<{
   where?: InputMaybe<GoodWhereInput>;
@@ -1192,14 +1209,14 @@ export type BasketQueryVariables = Exact<{
 }>;
 
 
-export type BasketQuery = { __typename?: 'Query', basket?: { __typename?: 'Basket', goodsCount?: number, sum?: number, goods?: Array<{ __typename?: 'Good', id: string, title?: string, price?: number, brand?: { __typename?: 'Brand', title?: string }, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', id: string, url: string } }> }> } };
+export type BasketQuery = { __typename?: 'Query', basket?: { __typename?: 'Basket', goodsCount?: number, sum?: number, goods?: Array<{ __typename?: 'Good', id: string, title?: string, price?: number, isInBasket?: boolean, isInFavorite?: boolean, brand?: { __typename?: 'Brand', title?: string }, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', id: string, url: string } }> }> } };
 
 export type FavoriteQueryVariables = Exact<{
   where: FavoriteWhereUniqueInput;
 }>;
 
 
-export type FavoriteQuery = { __typename?: 'Query', favorite?: { __typename?: 'Favorite', goodsCount?: number, goods?: Array<{ __typename?: 'Good', id: string, title?: string, price?: number, brand?: { __typename?: 'Brand', title?: string }, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', id: string, url: string } }> }> } };
+export type FavoriteQuery = { __typename?: 'Query', favorite?: { __typename?: 'Favorite', goodsCount?: number, goods?: Array<{ __typename?: 'Good', id: string, title?: string, price?: number, isInBasket?: boolean, isInFavorite?: boolean, brand?: { __typename?: 'Brand', title?: string }, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', id: string, url: string } }> }> } };
 
 export const GoodsFragmentDoc = gql`
     fragment goods on Good {
@@ -1215,6 +1232,8 @@ export const GoodsFragmentDoc = gql`
       url
     }
   }
+  isInBasket
+  isInFavorite
 }
     `;
 export const UserFragmentDoc = gql`
@@ -1226,6 +1245,74 @@ export const UserFragmentDoc = gql`
   favoritesId
 }
     `;
+export const FavoriteUpdateDocument = gql`
+    mutation FavoriteUpdate($where: FavoriteWhereUniqueInput!, $data: FavoriteUpdateInput!) {
+  updateFavorite(where: $where, data: $data) {
+    id
+  }
+}
+    `;
+export type FavoriteUpdateMutationFn = Apollo.MutationFunction<FavoriteUpdateMutation, FavoriteUpdateMutationVariables>;
+
+/**
+ * __useFavoriteUpdateMutation__
+ *
+ * To run a mutation, you first call `useFavoriteUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFavoriteUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [favoriteUpdateMutation, { data, loading, error }] = useFavoriteUpdateMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useFavoriteUpdateMutation(baseOptions?: Apollo.MutationHookOptions<FavoriteUpdateMutation, FavoriteUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<FavoriteUpdateMutation, FavoriteUpdateMutationVariables>(FavoriteUpdateDocument, options);
+      }
+export type FavoriteUpdateMutationHookResult = ReturnType<typeof useFavoriteUpdateMutation>;
+export type FavoriteUpdateMutationResult = Apollo.MutationResult<FavoriteUpdateMutation>;
+export type FavoriteUpdateMutationOptions = Apollo.BaseMutationOptions<FavoriteUpdateMutation, FavoriteUpdateMutationVariables>;
+export const BasketUpdateDocument = gql`
+    mutation BasketUpdate($where: BasketWhereUniqueInput!, $data: BasketUpdateInput!) {
+  updateBasket(where: $where, data: $data) {
+    id
+  }
+}
+    `;
+export type BasketUpdateMutationFn = Apollo.MutationFunction<BasketUpdateMutation, BasketUpdateMutationVariables>;
+
+/**
+ * __useBasketUpdateMutation__
+ *
+ * To run a mutation, you first call `useBasketUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBasketUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [basketUpdateMutation, { data, loading, error }] = useBasketUpdateMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useBasketUpdateMutation(baseOptions?: Apollo.MutationHookOptions<BasketUpdateMutation, BasketUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BasketUpdateMutation, BasketUpdateMutationVariables>(BasketUpdateDocument, options);
+      }
+export type BasketUpdateMutationHookResult = ReturnType<typeof useBasketUpdateMutation>;
+export type BasketUpdateMutationResult = Apollo.MutationResult<BasketUpdateMutation>;
+export type BasketUpdateMutationOptions = Apollo.BaseMutationOptions<BasketUpdateMutation, BasketUpdateMutationVariables>;
 export const AuthDocument = gql`
     mutation Auth($email: String!, $password: String!) {
   authenticateUserWithPassword(email: $email, password: $password) {
