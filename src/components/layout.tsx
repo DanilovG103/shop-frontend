@@ -19,6 +19,7 @@ interface Props {
   title: string
   children: React.ReactNode
   withBrands?: boolean
+  withTitle?: boolean
 }
 
 const routes = [
@@ -48,7 +49,12 @@ const Links = styled.ul`
   align-items: center;
 `
 
-export const Layout = ({ title, children, withBrands = true }: Props) => {
+export const Layout = ({
+  title,
+  children,
+  withBrands = true,
+  withTitle = true,
+}: Props) => {
   const { user, isAuthVisible, setIsAuthVisible } = useUserContext()
   const { pathname, push } = useRouter()
   const { colors } = useTheme()
@@ -91,14 +97,14 @@ export const Layout = ({ title, children, withBrands = true }: Props) => {
           <Box width={120} />
           <Links>
             {routes.map((route, i) => (
-              <li key={i}>
-                <Link href={route.to}>
-                  <Text color="text_primary">{route.title}</Text>
-                </Link>
+              <Link key={i} href={route.to}>
+                <Text as="li" color="text_primary">
+                  {route.title}
+                </Text>
                 {route.to === pathname && (
                   <Box bg="text_primary" width="100%" height="1px" />
                 )}
-              </li>
+              </Link>
             ))}
           </Links>
           <Box width={120}>
@@ -114,7 +120,7 @@ export const Layout = ({ title, children, withBrands = true }: Props) => {
       <Box display="flex" p="32px">
         {withBrands && <BrandsAside />}
         <Box width="100%" maxWidth={['1140px']}>
-          <Text>{title}</Text>
+          {withTitle && <Text>{title}</Text>}
           {children}
         </Box>
       </Box>

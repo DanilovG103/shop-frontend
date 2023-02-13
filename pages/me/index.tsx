@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { Layout } from 'src/components'
+
 export default function MePage() {
-  return <div>Me</div>
+  return <Layout title="Мой профиль" withBrands={false} />
 }

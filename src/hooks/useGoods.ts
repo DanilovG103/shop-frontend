@@ -15,7 +15,7 @@ export const useGoods = ({ orderBy, where }: GoodsQueryVariables) => {
 
   const { data, loading, fetchMore } = useGoodsQuery({
     variables: {
-      take: 10,
+      take: 12,
       skip: 0,
       orderBy,
       where: whereInput,

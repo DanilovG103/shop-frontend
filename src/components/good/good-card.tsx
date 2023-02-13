@@ -1,16 +1,11 @@
-import { MouseEventHandler, useCallback, useRef, useState } from 'react'
-import { toast } from 'react-toastify'
+import { MouseEventHandler, useCallback } from 'react'
 import { Card, IconButton, makeStyles } from '@material-ui/core'
 import Image from 'next/image'
 import Link from 'next/link'
 import styled from 'styled-components'
 
-import { useUserContext } from 'src/context'
-import {
-  GoodsFragment,
-  useBasketUpdateMutation,
-  useFavoriteUpdateMutation,
-} from 'src/generated/graphql'
+import { GoodsFragment } from 'src/generated/graphql'
+import { useGood } from 'src/hooks'
 import { CartIcon, FavoriteIcon } from 'src/icons'
 import { env } from 'src/utils'
 
@@ -35,6 +30,10 @@ const ImageWrapper = styled(Box)`
   position: relative;
 `
 
+const Img = styled(Image)`
+  border-radius: 4px;
+`
+
 const IconsBox = styled(Box)`
   position: absolute;
   display: flex;
@@ -53,74 +52,27 @@ interface Props {
 
 export const Good = ({ good }: Props) => {
   const styles = useStyles()
-  const { user, setIsAuthVisible } = useUserContext()
-  const [updateFavorite] = useFavoriteUpdateMutation()
-  const [updateBasket] = useBasketUpdateMutation()
-
-  const [isInFavorite, setIsInFavorite] = useState(good.isInFavorite ?? false)
-  const isInBasket = useRef(good.isInBasket ?? false)
+  const { isInFavorite, handleUpdateFavorite, handleUpdateBasket } = useGood({
+    inFavorite: good.isInFavorite,
+    inBasket: good.isInBasket,
+  })
 
   const onCartClick: MouseEventHandler<HTMLButtonElement> = useCallback(
     (event) => {
       event.preventDefault()
 
-      if (!user) {
-        return setIsAuthVisible(true)
-      }
-
-      const option = isInBasket.current ? 'disconnect' : 'connect'
-
-      if (isInBasket.current) {
-        toast('Товар удален из корзины')
-      } else {
-        toast('Товар добавлен в корзину', { type: 'success' })
-      }
-
-      isInBasket.current = !isInBasket.current
-
-      updateBasket({
-        variables: {
-          where: {
-            id: user.basketId,
-          },
-          data: {
-            goods: {
-              [option]: [{ id: good.id }],
-            },
-          },
-        },
-      })
+      handleUpdateBasket(good.id)
     },
-    [good.id, setIsAuthVisible, updateBasket, user],
+    [good.id, handleUpdateBasket],
   )
 
   const onFavoriteClick: MouseEventHandler<HTMLButtonElement> = useCallback(
     (event) => {
       event.preventDefault()
 
-      if (!user) {
-        return setIsAuthVisible(true)
-      }
-
-      setIsInFavorite((prev) => {
-        const option = prev ? 'disconnect' : 'connect'
-        updateFavorite({
-          variables: {
-            where: {
-              id: user.favoritesId,
-            },
-            data: {
-              goods: {
-                [option]: [{ id: good.id }],
-              },
-            },
-          },
-        })
-
-        return !prev
-      })
+      handleUpdateFavorite(good.id)
     },
-    [good.id, setIsAuthVisible, updateFavorite, user],
+    [good.id, handleUpdateFavorite],
   )
 
   const firstImage = good.images?.[0]?.image
@@ -131,7 +83,7 @@ export const Good = ({ good }: Props) => {
     <Link href={`/good/${good.id}`}>
       <Card className={styles.card}>
         <ImageWrapper>
-          <Image src={imageUri} alt={'image'} width={200} height={200} />
+          <Img src={imageUri} alt={'image'} width={200} height={200} />
           <IconsBox>
             <IconButton className={styles.icon} onClick={onFavoriteClick}>
               <FavoriteIcon active={isInFavorite} />

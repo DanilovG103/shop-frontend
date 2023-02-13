@@ -29,7 +29,7 @@ export type TextProps = ColorProps &
   }
 
 export const Text = styled.p<TextProps>`
-  cursor: ${({ cursor }) => cursor ?? 'auto'};
+  cursor: ${({ cursor }) => cursor};
   ${compose(
     color,
     space,
