@@ -1,6 +1,7 @@
 import React, {
   createContext,
   Dispatch,
+  PropsWithChildren,
   SetStateAction,
   useCallback,
   useContext,
@@ -30,7 +31,7 @@ const initialValues: Values = {
 
 const Context = createContext(initialValues)
 
-export const UserProvider = ({ children }: { children: React.ReactNode }) => {
+export const UserProvider = ({ children }: PropsWithChildren) => {
   const [getMeQuery] = useMeLazyQuery()
   const [isAuthVisible, setIsAuthVisible] = useState(false)
   const [user, setUser] = useState<MaybeUser>(null)

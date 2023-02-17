@@ -13,9 +13,6 @@ import { Box } from '../box'
 import { Text } from '../text'
 
 const useStyles = makeStyles({
-  card: {
-    padding: '16px',
-  },
   icon: {
     color: '#ffffff',
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
@@ -48,14 +45,17 @@ const IconsBox = styled(Box)`
 
 interface Props {
   good: GoodsFragment
+  displayType?: 'default' | 'basket'
 }
 
-export const Good = ({ good }: Props) => {
+export const Good = ({ good, displayType = 'default' }: Props) => {
   const styles = useStyles()
-  const { isInFavorite, handleUpdateFavorite, handleUpdateBasket } = useGood({
-    inFavorite: good.isInFavorite,
-    inBasket: good.isInBasket,
-  })
+  // const { isInFavorite, handleUpdateFavorite, handleUpdateBasket } = useGood({
+  //   inFavorite: good.isInFavorite,
+  //   inBasket: good.isInBasket,
+  // })
+
+  const isDefault = displayType === 'default'
 
   const onCartClick: MouseEventHandler<HTMLButtonElement> = useCallback(
     (event) => {
@@ -79,24 +79,42 @@ export const Good = ({ good }: Props) => {
 
   const imageUri = firstImage ? env.image + firstImage.url : ''
 
+  const containerDirection = isDefault ? 'column' : 'row'
+
+  const textContentMargin = isDefault ? '0' : '32px'
+
   return (
     <Link href={`/good/${good.id}`}>
-      <Card className={styles.card}>
-        <ImageWrapper>
-          <Img src={imageUri} alt={'image'} width={200} height={200} />
-          <IconsBox>
-            <IconButton className={styles.icon} onClick={onFavoriteClick}>
-              <FavoriteIcon active={isInFavorite} />
-            </IconButton>
-            <IconButton className={styles.icon} onClick={onCartClick}>
-              <CartIcon />
-            </IconButton>
-          </IconsBox>
-        </ImageWrapper>
-        <Text>{good.title}</Text>
-        <Text>{good.brand?.title}</Text>
-        <Text>{good.price?.toLocaleString('ru-RU') + ' ₽'}</Text>
+      <Card>
+        <Box p="16px" display="flex" flexDirection={containerDirection}>
+          <ImageWrapper>
+            <Img src={imageUri} alt={'image'} width={200} height={200} />
+            {displayType === 'default' && (
+              <IconsBox>
+                <IconButton className={styles.icon} onClick={onFavoriteClick}>
+                  <FavoriteIcon active />
+                </IconButton>
+                <IconButton className={styles.icon} onClick={onCartClick}>
+                  <CartIcon />
+                </IconButton>
+              </IconsBox>
+            )}
+          </ImageWrapper>
+          <Box ml={textContentMargin}>
+            <Text>{good.title}</Text>
+            <Text>{good.brand?.title}</Text>
+            <Text>{good.price?.toLocaleString('ru-RU') + ' ₽'}</Text>
+          </Box>
+        </Box>
       </Card>
     </Link>
   )
+}
+
+function handleUpdateFavorite(id: string) {
+  throw new Error('Function not implemented.')
+}
+
+function handleUpdateBasket(id: string) {
+  throw new Error('Function not implemented.')
 }

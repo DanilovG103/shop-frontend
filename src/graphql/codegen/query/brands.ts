@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-const getBrands = gql`
+gql`
   query Brands {
     brands {
       id

@@ -30,10 +30,10 @@ const FavoriteInactive = (props: SVGProps<SVGSVGElement>) => (
 )
 
 interface Props extends SVGProps<SVGSVGElement> {
-  active: boolean
+  active?: boolean
 }
 
-export const FavoriteIcon = ({ active, ...props }: Props) => {
+export const FavoriteIcon = ({ active = false, ...props }: Props) => {
   return active ? (
     <FavoriteActive {...props} />
   ) : (

@@ -1,12 +1,30 @@
 overwrite: true
 schema: 'http://localhost:8000/api/graphql'
-documents: './src/graphql/**/*.ts'
+documents: './src/graphql/codegen/**/*.ts'
 generates:
   src/generated/graphql.tsx:
     plugins:
-      - 'typescript'
-      - 'typescript-operations'
-      - 'typescript-react-apollo'
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
     config:
       maybeValue: T
       avoidOptionals: false
+  # src/generated/page.tsx:
+  #   config:
+  #     maybeValue: T
+  #     avoidOptionals: false
+  #     apolloReactHooksImportFrom: "@apollo/client"
+  #     apolloImportFrom: "@apollo/client"
+  #     apolloCacheImportFrom: "@apollo/client"
+  #     importDocumentNodeExternallyFrom: ./graphql
+  #     documentMode: external
+  #     reactApolloVersion: 3
+  #     withHooks: true
+  #     contextType: 'ApolloClientContext'
+  #     contextTypeRequired: true
+  #   preset: import-types
+  #   presetConfig:
+  #     typesPath: ./graphql
+  #   plugins:
+  #     - "graphql-codegen-apollo-next-ssr"

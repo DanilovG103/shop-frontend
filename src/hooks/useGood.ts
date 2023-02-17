@@ -16,6 +16,7 @@ interface Props {
 
 export const useGood = ({ id, inFavorite, inBasket }: Props) => {
   const { user, setIsAuthVisible } = useUserContext()
+
   const [isInFavorite, setIsInFavorite] = useState(() => {
     if (!id) {
       return !!inFavorite
@@ -27,12 +28,13 @@ export const useGood = ({ id, inFavorite, inBasket }: Props) => {
   const [updateFavorite] = useFavoriteUpdateMutation()
 
   const [isInBasket, setIsInBasket] = useState(() => {
-    if (id) {
+    if (!id) {
       return !!inBasket
     }
 
     return false
   })
+
   const [updateBasket] = useBasketUpdateMutation()
 
   const [getGood, { data, loading }] = useGoodLazyQuery()
@@ -40,7 +42,9 @@ export const useGood = ({ id, inFavorite, inBasket }: Props) => {
   const getGoodById = useCallback(async () => {
     if (!id) return
 
-    const { data: goodData } = await getGood({ variables: { id } })
+    const { data: goodData } = await getGood({
+      variables: { id },
+    })
 
     setIsInBasket(goodData?.good?.isInBasket ?? false)
     setIsInFavorite(goodData?.good?.isInFavorite ?? false)
@@ -51,14 +55,12 @@ export const useGood = ({ id, inFavorite, inBasket }: Props) => {
   }, [getGoodById])
 
   const handleUpdateBasket = useCallback(
-    (goodId?: string) => {
+    (goodId = '') => {
       if (!user) {
         return setIsAuthVisible(true)
       }
 
       setIsInBasket((prev) => {
-        const option = prev ? 'disconnect' : 'connect'
-
         if (prev) {
           toast('Товар удален из корзины')
         } else {
@@ -66,14 +68,7 @@ export const useGood = ({ id, inFavorite, inBasket }: Props) => {
         }
         updateBasket({
           variables: {
-            where: {
-              id: user.basketId,
-            },
-            data: {
-              goods: {
-                [option]: [{ id: id ? id : goodId }],
-              },
-            },
+            id: id ? id : goodId,
           },
         })
 
@@ -84,22 +79,14 @@ export const useGood = ({ id, inFavorite, inBasket }: Props) => {
   )
 
   const handleUpdateFavorite = useCallback(
-    (goodId?: string) => {
+    (goodId = '') => {
       if (!user) {
         return setIsAuthVisible(true)
       }
       setIsInFavorite((prev) => {
-        const option = prev ? 'disconnect' : 'connect'
         updateFavorite({
           variables: {
-            where: {
-              id: user.favoritesId,
-            },
-            data: {
-              goods: {
-                [option]: [{ id: id ? id : goodId }],
-              },
-            },
+            id: id ? id : goodId,
           },
         })
 

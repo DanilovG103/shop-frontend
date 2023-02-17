@@ -1,24 +1,24 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { IconButton } from '@material-ui/core'
+import { noop } from 'lodash'
 import Head from 'next/head'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import styled, { useTheme } from 'styled-components'
 
 import { useUserContext } from 'src/context'
-import { CartIcon, UserIcon } from 'src/icons'
+import { CartIcon, FavoriteIcon, UserIcon } from 'src/icons'
 import { Route } from 'src/utils'
 
+import { Aside } from './aside'
 import { AuthModal } from './auth-modal'
 import { Box } from './box'
-import { BrandsAside } from './brands-aside'
 import { Text } from './text'
 
 interface Props {
   title: string
   children: React.ReactNode
-  withBrands?: boolean
+  withAside?: boolean
   withTitle?: boolean
 }
 
@@ -52,7 +52,7 @@ const Links = styled.ul`
 export const Layout = ({
   title,
   children,
-  withBrands = true,
+  withAside = true,
   withTitle = true,
 }: Props) => {
   const { user, isAuthVisible, setIsAuthVisible } = useUserContext()
@@ -75,18 +75,37 @@ export const Layout = ({
     return push(Route.me)
   }, [push, setIsAuthVisible, user])
 
+  const icons = useMemo(
+    () => [
+      {
+        component: FavoriteIcon,
+        onClick: noop,
+      },
+      {
+        component: CartIcon,
+        onClick: onCartPress,
+      },
+      {
+        component: UserIcon,
+        onClick: onUserPress,
+      },
+    ],
+    [onCartPress, onUserPress],
+  )
+
   return (
     <>
       <Head>
         <title>{title}</title>
       </Head>
+
       <Box
         display="flex"
         as="header"
         borderBottomWidth="1px"
         borderBottomColor="header_border"
         borderBottomStyle="solid"
-        py="24px"
+        p="24px"
         bg="bg_primary">
         <Box
           width="100%"
@@ -107,19 +126,22 @@ export const Layout = ({
               </Link>
             ))}
           </Links>
-          <Box width={120}>
-            <IconButton onClick={onCartPress}>
-              <CartIcon color={colors.icons.primary} />
-            </IconButton>
-            <IconButton onClick={onUserPress}>
-              <UserIcon color={colors.icons.primary} />
-            </IconButton>
+          <Box>
+            {icons.map((item, i) => (
+              <IconButton key={i} onClick={item.onClick}>
+                <item.component color={colors.icons.primary} />
+              </IconButton>
+            ))}
           </Box>
         </Box>
       </Box>
       <Box display="flex" p="32px">
-        {withBrands && <BrandsAside />}
-        <Box width="100%" maxWidth={['1140px']}>
+        {withAside && <Aside />}
+        <Box
+          m="0 auto"
+          pl={withAside ? '12px' : '0'}
+          width="100%"
+          maxWidth={['1140px']}>
           {withTitle && <Text>{title}</Text>}
           {children}
         </Box>

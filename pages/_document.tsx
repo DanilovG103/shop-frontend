@@ -1,3 +1,5 @@
+import { Fragment } from 'react'
+import { ServerStyleSheets as MaterialUiServerStyleSheets } from '@material-ui/core/styles'
 import Document, {
   DocumentContext,
   Head,
@@ -11,6 +13,7 @@ export default class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
     const sheet = new ServerStyleSheet()
     const originalRenderPage = ctx.renderPage
+    const muiSheets = new MaterialUiServerStyleSheets()
 
     try {
       ctx.renderPage = () =>
@@ -24,10 +27,11 @@ export default class MyDocument extends Document {
       return {
         ...initialProps,
         styles: (
-          <>
+          <Fragment key="styles">
             {initialProps.styles}
+            {muiSheets.getStyleElement()}
             {sheet.getStyleElement()}
-          </>
+          </Fragment>
         ),
       }
     } finally {

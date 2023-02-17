@@ -11,11 +11,15 @@ import noop from 'lodash/noop'
 interface Values {
   brandsIds: string[]
   setBrandsIds(val: string): void
+  categoryIds: string[]
+  setCategoriesIds(val: string): void
 }
 
 const initialValues: Values = {
   brandsIds: [],
   setBrandsIds: noop,
+  categoryIds: [],
+  setCategoriesIds: noop,
 }
 
 const Context = createContext(initialValues)
@@ -26,6 +30,13 @@ interface Props {
 
 export const FilterProvider = ({ children }: Props) => {
   const [brandsIds, setIds] = useState<string[]>([])
+  const [categoryIds, setCIds] = useState<string[]>([])
+
+  const setCategoriesIds = useCallback((val: string) => {
+    setCIds((prev) =>
+      prev.includes(val) ? prev.filter((item) => item !== val) : [...prev, val],
+    )
+  }, [])
 
   const setBrandsIds = useCallback((val: string) => {
     setIds((prev) =>
@@ -37,8 +48,10 @@ export const FilterProvider = ({ children }: Props) => {
     () => ({
       brandsIds,
       setBrandsIds,
+      categoryIds,
+      setCategoriesIds,
     }),
-    [brandsIds, setBrandsIds],
+    [brandsIds, categoryIds, setBrandsIds, setCategoriesIds],
   )
 
   return <Context.Provider value={value}>{children}</Context.Provider>

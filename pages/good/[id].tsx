@@ -3,12 +3,16 @@ import Carousel from 'react-material-ui-carousel'
 import { Button, CircularProgress } from '@material-ui/core'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import styled from 'styled-components'
 
 import { Box, Layout, Text } from 'src/components'
-import { useGoodQuery } from 'src/generated/graphql'
 import { useGood } from 'src/hooks'
 import { CartIcon, FavoriteIcon } from 'src/icons'
 import { env } from 'src/utils'
+
+const Img = styled(Image)`
+  object-fit: cover;
+`
 
 export default function CurrentGoodPage() {
   const { query } = useRouter()
@@ -30,18 +34,23 @@ export default function CurrentGoodPage() {
     [handleUpdateFavorite],
   )
 
+  const updateBasket: MouseEventHandler<HTMLButtonElement> = useCallback(
+    (event) => {
+      event.preventDefault()
+      handleUpdateBasket()
+    },
+    [handleUpdateBasket],
+  )
+
   return (
-    <Layout
-      withTitle={false}
-      withBrands={false}
-      title={data?.good?.title ?? ''}>
+    <Layout withTitle={false} withAside={false} title={data?.good?.title ?? ''}>
       {loading ? (
         <CircularProgress />
       ) : (
-        <Box display="flex">
-          <Carousel timeout={350} autoPlay={false}>
+        <Box display="flex" flexDirection={['column', 'column', 'row']}>
+          <Carousel swipe timeout={350} autoPlay={false}>
             {data?.good?.images?.map((item) => (
-              <Image
+              <Img
                 key={item.image?.id}
                 src={env.image + item.image?.url ?? ''}
                 alt="image"
@@ -56,9 +65,11 @@ export default function CurrentGoodPage() {
             <Button
               onClick={updateFavorite}
               startIcon={<FavoriteIcon active={isInFavorite} />}>
-              Добавить в избранное
+              {!isInFavorite ? 'Добавить в избранное' : 'Удалить из избранного'}
             </Button>
-            <Button startIcon={<CartIcon />}>Добавить в корзину</Button>
+            <Button onClick={updateBasket} startIcon={<CartIcon />}>
+              {!isInBasket ? 'Добавить в корзину' : 'Удалить из корзины'}
+            </Button>
           </Box>
         </Box>
       )}

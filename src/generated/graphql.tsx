@@ -51,17 +51,6 @@ export type BasketOrderByInput = {
   id?: InputMaybe<OrderDirection>;
 };
 
-export type BasketRelateToOneForCreateInput = {
-  connect?: InputMaybe<BasketWhereUniqueInput>;
-  create?: InputMaybe<BasketCreateInput>;
-};
-
-export type BasketRelateToOneForUpdateInput = {
-  connect?: InputMaybe<BasketWhereUniqueInput>;
-  create?: InputMaybe<BasketCreateInput>;
-  disconnect?: InputMaybe<Scalars['Boolean']>;
-};
-
 export type BasketUpdateArgs = {
   data: BasketUpdateInput;
   where: BasketWhereUniqueInput;
@@ -132,6 +121,53 @@ export type BrandWhereUniqueInput = {
   id?: InputMaybe<Scalars['ID']>;
 };
 
+export type Category = {
+  __typename?: 'Category';
+  id: Scalars['ID'];
+  title?: Maybe<Scalars['String']>;
+};
+
+export type CategoryCreateInput = {
+  title?: InputMaybe<Scalars['String']>;
+};
+
+export type CategoryOrderByInput = {
+  id?: InputMaybe<OrderDirection>;
+  title?: InputMaybe<OrderDirection>;
+};
+
+export type CategoryRelateToOneForCreateInput = {
+  connect?: InputMaybe<CategoryWhereUniqueInput>;
+  create?: InputMaybe<CategoryCreateInput>;
+};
+
+export type CategoryRelateToOneForUpdateInput = {
+  connect?: InputMaybe<CategoryWhereUniqueInput>;
+  create?: InputMaybe<CategoryCreateInput>;
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type CategoryUpdateArgs = {
+  data: CategoryUpdateInput;
+  where: CategoryWhereUniqueInput;
+};
+
+export type CategoryUpdateInput = {
+  title?: InputMaybe<Scalars['String']>;
+};
+
+export type CategoryWhereInput = {
+  AND?: InputMaybe<Array<CategoryWhereInput>>;
+  NOT?: InputMaybe<Array<CategoryWhereInput>>;
+  OR?: InputMaybe<Array<CategoryWhereInput>>;
+  id?: InputMaybe<IdFilter>;
+  title?: InputMaybe<StringFilter>;
+};
+
+export type CategoryWhereUniqueInput = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
 export type DateTimeNullableFilter = {
   equals?: InputMaybe<Scalars['DateTime']>;
   gt?: InputMaybe<Scalars['DateTime']>;
@@ -198,8 +234,10 @@ export type FavoriteWhereUniqueInput = {
 
 export type Good = {
   __typename?: 'Good';
+  audienceCategory?: Maybe<GoodAudienceCategoryType>;
   brand?: Maybe<Brand>;
-  category?: Maybe<GoodCategoryType>;
+  category?: Maybe<Category>;
+  count?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
@@ -224,22 +262,24 @@ export type GoodImagesCountArgs = {
   where?: ImageWhereInput;
 };
 
-export enum GoodCategoryType {
+export enum GoodAudienceCategoryType {
   Female = 'FEMALE',
   Kids = 'KIDS',
   Male = 'MALE'
 }
 
-export type GoodCategoryTypeNullableFilter = {
-  equals?: InputMaybe<GoodCategoryType>;
-  in?: InputMaybe<Array<GoodCategoryType>>;
-  not?: InputMaybe<GoodCategoryTypeNullableFilter>;
-  notIn?: InputMaybe<Array<GoodCategoryType>>;
+export type GoodAudienceCategoryTypeNullableFilter = {
+  equals?: InputMaybe<GoodAudienceCategoryType>;
+  in?: InputMaybe<Array<GoodAudienceCategoryType>>;
+  not?: InputMaybe<GoodAudienceCategoryTypeNullableFilter>;
+  notIn?: InputMaybe<Array<GoodAudienceCategoryType>>;
 };
 
 export type GoodCreateInput = {
+  audienceCategory?: InputMaybe<GoodAudienceCategoryType>;
   brand?: InputMaybe<BrandRelateToOneForCreateInput>;
-  category?: InputMaybe<GoodCategoryType>;
+  category?: InputMaybe<CategoryRelateToOneForCreateInput>;
+  count?: InputMaybe<Scalars['Int']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageRelateToManyForCreateInput>;
@@ -254,7 +294,8 @@ export type GoodManyRelationFilter = {
 };
 
 export type GoodOrderByInput = {
-  category?: InputMaybe<OrderDirection>;
+  audienceCategory?: InputMaybe<OrderDirection>;
+  count?: InputMaybe<OrderDirection>;
   createdAt?: InputMaybe<OrderDirection>;
   description?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
@@ -280,8 +321,10 @@ export type GoodUpdateArgs = {
 };
 
 export type GoodUpdateInput = {
+  audienceCategory?: InputMaybe<GoodAudienceCategoryType>;
   brand?: InputMaybe<BrandRelateToOneForUpdateInput>;
-  category?: InputMaybe<GoodCategoryType>;
+  category?: InputMaybe<CategoryRelateToOneForUpdateInput>;
+  count?: InputMaybe<Scalars['Int']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageRelateToManyForUpdateInput>;
@@ -293,8 +336,10 @@ export type GoodWhereInput = {
   AND?: InputMaybe<Array<GoodWhereInput>>;
   NOT?: InputMaybe<Array<GoodWhereInput>>;
   OR?: InputMaybe<Array<GoodWhereInput>>;
+  audienceCategory?: InputMaybe<GoodAudienceCategoryTypeNullableFilter>;
   brand?: InputMaybe<BrandWhereInput>;
-  category?: InputMaybe<GoodCategoryTypeNullableFilter>;
+  category?: InputMaybe<CategoryWhereInput>;
+  count?: InputMaybe<IntFilter>;
   createdAt?: InputMaybe<DateTimeNullableFilter>;
   description?: InputMaybe<StringFilter>;
   id?: InputMaybe<IdFilter>;
@@ -523,6 +568,8 @@ export type Mutation = {
   createBaskets?: Maybe<Array<Maybe<Basket>>>;
   createBrand?: Maybe<Brand>;
   createBrands?: Maybe<Array<Maybe<Brand>>>;
+  createCategories?: Maybe<Array<Maybe<Category>>>;
+  createCategory?: Maybe<Category>;
   createFavorite?: Maybe<Favorite>;
   createFavorites?: Maybe<Array<Maybe<Favorite>>>;
   createGood?: Maybe<Good>;
@@ -537,6 +584,8 @@ export type Mutation = {
   deleteBaskets?: Maybe<Array<Maybe<Basket>>>;
   deleteBrand?: Maybe<Brand>;
   deleteBrands?: Maybe<Array<Maybe<Brand>>>;
+  deleteCategories?: Maybe<Array<Maybe<Category>>>;
+  deleteCategory?: Maybe<Category>;
   deleteFavorite?: Maybe<Favorite>;
   deleteFavorites?: Maybe<Array<Maybe<Favorite>>>;
   deleteGood?: Maybe<Good>;
@@ -553,12 +602,16 @@ export type Mutation = {
   updateBaskets?: Maybe<Array<Maybe<Basket>>>;
   updateBrand?: Maybe<Brand>;
   updateBrands?: Maybe<Array<Maybe<Brand>>>;
+  updateCategories?: Maybe<Array<Maybe<Category>>>;
+  updateCategory?: Maybe<Category>;
   updateFavorite?: Maybe<Favorite>;
   updateFavorites?: Maybe<Array<Maybe<Favorite>>>;
   updateGood?: Maybe<Good>;
   updateGoods?: Maybe<Array<Maybe<Good>>>;
   updateImage?: Maybe<Image>;
   updateImages?: Maybe<Array<Maybe<Image>>>;
+  updateMyBasket?: Maybe<Good>;
+  updateMyFavorite?: Maybe<Good>;
   updateRequest?: Maybe<Request>;
   updateRequests?: Maybe<Array<Maybe<Request>>>;
   updateUser?: Maybe<User>;
@@ -589,6 +642,16 @@ export type MutationCreateBrandArgs = {
 
 export type MutationCreateBrandsArgs = {
   data: Array<BrandCreateInput>;
+};
+
+
+export type MutationCreateCategoriesArgs = {
+  data: Array<CategoryCreateInput>;
+};
+
+
+export type MutationCreateCategoryArgs = {
+  data: CategoryCreateInput;
 };
 
 
@@ -659,6 +722,16 @@ export type MutationDeleteBrandArgs = {
 
 export type MutationDeleteBrandsArgs = {
   where: Array<BrandWhereUniqueInput>;
+};
+
+
+export type MutationDeleteCategoriesArgs = {
+  where: Array<CategoryWhereUniqueInput>;
+};
+
+
+export type MutationDeleteCategoryArgs = {
+  where: CategoryWhereUniqueInput;
 };
 
 
@@ -741,6 +814,17 @@ export type MutationUpdateBrandsArgs = {
 };
 
 
+export type MutationUpdateCategoriesArgs = {
+  data: Array<CategoryUpdateArgs>;
+};
+
+
+export type MutationUpdateCategoryArgs = {
+  data: CategoryUpdateInput;
+  where: CategoryWhereUniqueInput;
+};
+
+
 export type MutationUpdateFavoriteArgs = {
   data: FavoriteUpdateInput;
   where: FavoriteWhereUniqueInput;
@@ -771,6 +855,16 @@ export type MutationUpdateImageArgs = {
 
 export type MutationUpdateImagesArgs = {
   data: Array<ImageUpdateArgs>;
+};
+
+
+export type MutationUpdateMyBasketArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationUpdateMyFavoriteArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -828,6 +922,9 @@ export type Query = {
   brand?: Maybe<Brand>;
   brands?: Maybe<Array<Brand>>;
   brandsCount?: Maybe<Scalars['Int']>;
+  categories?: Maybe<Array<Category>>;
+  categoriesCount?: Maybe<Scalars['Int']>;
+  category?: Maybe<Category>;
   favorite?: Maybe<Favorite>;
   favorites?: Maybe<Array<Favorite>>;
   favoritesCount?: Maybe<Scalars['Int']>;
@@ -880,6 +977,24 @@ export type QueryBrandsArgs = {
 
 export type QueryBrandsCountArgs = {
   where?: BrandWhereInput;
+};
+
+
+export type QueryCategoriesArgs = {
+  orderBy?: Array<CategoryOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: CategoryWhereInput;
+};
+
+
+export type QueryCategoriesCountArgs = {
+  where?: CategoryWhereInput;
+};
+
+
+export type QueryCategoryArgs = {
+  where: CategoryWhereUniqueInput;
 };
 
 
@@ -979,14 +1094,28 @@ export enum QueryMode {
 
 export type Request = {
   __typename?: 'Request';
-  data?: Maybe<Basket>;
+  goods?: Maybe<Array<Good>>;
+  goodsCount?: Maybe<Scalars['Int']>;
   id: Scalars['ID'];
   rejectReason?: Maybe<Scalars['String']>;
   status?: Maybe<RequestStatusType>;
 };
 
+
+export type RequestGoodsArgs = {
+  orderBy?: Array<GoodOrderByInput>;
+  skip?: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+  where?: GoodWhereInput;
+};
+
+
+export type RequestGoodsCountArgs = {
+  where?: GoodWhereInput;
+};
+
 export type RequestCreateInput = {
-  data?: InputMaybe<BasketRelateToOneForCreateInput>;
+  goods?: InputMaybe<GoodRelateToManyForCreateInput>;
   rejectReason?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<RequestStatusType>;
 };
@@ -1016,7 +1145,7 @@ export type RequestUpdateArgs = {
 };
 
 export type RequestUpdateInput = {
-  data?: InputMaybe<BasketRelateToOneForUpdateInput>;
+  goods?: InputMaybe<GoodRelateToManyForUpdateInput>;
   rejectReason?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<RequestStatusType>;
 };
@@ -1025,7 +1154,7 @@ export type RequestWhereInput = {
   AND?: InputMaybe<Array<RequestWhereInput>>;
   NOT?: InputMaybe<Array<RequestWhereInput>>;
   OR?: InputMaybe<Array<RequestWhereInput>>;
-  data?: InputMaybe<BasketWhereInput>;
+  goods?: InputMaybe<GoodManyRelationFilter>;
   id?: InputMaybe<IdFilter>;
   rejectReason?: InputMaybe<StringFilter>;
   status?: InputMaybe<RequestStatusTypeNullableFilter>;
@@ -1058,6 +1187,7 @@ export type User = {
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
   password?: Maybe<PasswordState>;
+  role?: Maybe<UserRoleType>;
 };
 
 export type UserAuthenticationWithPasswordFailure = {
@@ -1080,6 +1210,7 @@ export type UserCreateInput = {
   favoritesId?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   password?: InputMaybe<Scalars['String']>;
+  role?: InputMaybe<UserRoleType>;
 };
 
 export type UserOrderByInput = {
@@ -1089,6 +1220,7 @@ export type UserOrderByInput = {
   favoritesId?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
   name?: InputMaybe<OrderDirection>;
+  role?: InputMaybe<OrderDirection>;
 };
 
 export type UserRelateToOneForCreateInput = {
@@ -1100,6 +1232,18 @@ export type UserRelateToOneForUpdateInput = {
   connect?: InputMaybe<UserWhereUniqueInput>;
   create?: InputMaybe<UserCreateInput>;
   disconnect?: InputMaybe<Scalars['Boolean']>;
+};
+
+export enum UserRoleType {
+  Admin = 'ADMIN',
+  User = 'USER'
+}
+
+export type UserRoleTypeNullableFilter = {
+  equals?: InputMaybe<UserRoleType>;
+  in?: InputMaybe<Array<UserRoleType>>;
+  not?: InputMaybe<UserRoleTypeNullableFilter>;
+  notIn?: InputMaybe<Array<UserRoleType>>;
 };
 
 export type UserUpdateArgs = {
@@ -1114,6 +1258,7 @@ export type UserUpdateInput = {
   favoritesId?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   password?: InputMaybe<Scalars['String']>;
+  role?: InputMaybe<UserRoleType>;
 };
 
 export type UserWhereInput = {
@@ -1126,6 +1271,7 @@ export type UserWhereInput = {
   favoritesId?: InputMaybe<StringFilter>;
   id?: InputMaybe<IdFilter>;
   name?: InputMaybe<StringFilter>;
+  role?: InputMaybe<UserRoleTypeNullableFilter>;
 };
 
 export type UserWhereUniqueInput = {
@@ -1138,20 +1284,18 @@ export type GoodsFragment = { __typename?: 'Good', id: string, title?: string, p
 export type UserFragment = { __typename?: 'User', id: string, name?: string, email?: string, basketId?: string, favoritesId?: string };
 
 export type FavoriteUpdateMutationVariables = Exact<{
-  where: FavoriteWhereUniqueInput;
-  data: FavoriteUpdateInput;
+  id: Scalars['ID'];
 }>;
 
 
-export type FavoriteUpdateMutation = { __typename?: 'Mutation', updateFavorite?: { __typename?: 'Favorite', id: string } };
+export type FavoriteUpdateMutation = { __typename?: 'Mutation', updateMyFavorite?: { __typename?: 'Good', id: string, isInFavorite?: boolean } };
 
 export type BasketUpdateMutationVariables = Exact<{
-  where: BasketWhereUniqueInput;
-  data: BasketUpdateInput;
+  id: Scalars['ID'];
 }>;
 
 
-export type BasketUpdateMutation = { __typename?: 'Mutation', updateBasket?: { __typename?: 'Basket', id: string } };
+export type BasketUpdateMutation = { __typename?: 'Mutation', updateMyBasket?: { __typename?: 'Good', id: string, isInBasket?: boolean } };
 
 export type AuthMutationVariables = Exact<{
   email: Scalars['String'];
@@ -1174,6 +1318,11 @@ export type BrandsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type BrandsQuery = { __typename?: 'Query', brands?: Array<{ __typename?: 'Brand', id: string, title?: string }> };
+
+export type CategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CategoriesQuery = { __typename?: 'Query', categories?: Array<{ __typename?: 'Category', id: string, title?: string }> };
 
 export type GoodsQueryVariables = Exact<{
   where?: GoodWhereInput;
@@ -1246,9 +1395,10 @@ export const UserFragmentDoc = gql`
 }
     `;
 export const FavoriteUpdateDocument = gql`
-    mutation FavoriteUpdate($where: FavoriteWhereUniqueInput!, $data: FavoriteUpdateInput!) {
-  updateFavorite(where: $where, data: $data) {
+    mutation FavoriteUpdate($id: ID!) {
+  updateMyFavorite(id: $id) {
     id
+    isInFavorite
   }
 }
     `;
@@ -1267,8 +1417,7 @@ export type FavoriteUpdateMutationFn = Apollo.MutationFunction<FavoriteUpdateMut
  * @example
  * const [favoriteUpdateMutation, { data, loading, error }] = useFavoriteUpdateMutation({
  *   variables: {
- *      where: // value for 'where'
- *      data: // value for 'data'
+ *      id: // value for 'id'
  *   },
  * });
  */
@@ -1280,9 +1429,10 @@ export type FavoriteUpdateMutationHookResult = ReturnType<typeof useFavoriteUpda
 export type FavoriteUpdateMutationResult = Apollo.MutationResult<FavoriteUpdateMutation>;
 export type FavoriteUpdateMutationOptions = Apollo.BaseMutationOptions<FavoriteUpdateMutation, FavoriteUpdateMutationVariables>;
 export const BasketUpdateDocument = gql`
-    mutation BasketUpdate($where: BasketWhereUniqueInput!, $data: BasketUpdateInput!) {
-  updateBasket(where: $where, data: $data) {
+    mutation BasketUpdate($id: ID!) {
+  updateMyBasket(id: $id) {
     id
+    isInBasket
   }
 }
     `;
@@ -1301,8 +1451,7 @@ export type BasketUpdateMutationFn = Apollo.MutationFunction<BasketUpdateMutatio
  * @example
  * const [basketUpdateMutation, { data, loading, error }] = useBasketUpdateMutation({
  *   variables: {
- *      where: // value for 'where'
- *      data: // value for 'data'
+ *      id: // value for 'id'
  *   },
  * });
  */
@@ -1430,6 +1579,41 @@ export function useBrandsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Bra
 export type BrandsQueryHookResult = ReturnType<typeof useBrandsQuery>;
 export type BrandsLazyQueryHookResult = ReturnType<typeof useBrandsLazyQuery>;
 export type BrandsQueryResult = Apollo.QueryResult<BrandsQuery, BrandsQueryVariables>;
+export const CategoriesDocument = gql`
+    query Categories {
+  categories(orderBy: {title: asc}) {
+    id
+    title
+  }
+}
+    `;
+
+/**
+ * __useCategoriesQuery__
+ *
+ * To run a query within a React component, call `useCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCategoriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCategoriesQuery(baseOptions?: Apollo.QueryHookOptions<CategoriesQuery, CategoriesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CategoriesQuery, CategoriesQueryVariables>(CategoriesDocument, options);
+      }
+export function useCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CategoriesQuery, CategoriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CategoriesQuery, CategoriesQueryVariables>(CategoriesDocument, options);
+        }
+export type CategoriesQueryHookResult = ReturnType<typeof useCategoriesQuery>;
+export type CategoriesLazyQueryHookResult = ReturnType<typeof useCategoriesLazyQuery>;
+export type CategoriesQueryResult = Apollo.QueryResult<CategoriesQuery, CategoriesQueryVariables>;
 export const GoodsDocument = gql`
     query Goods($where: GoodWhereInput! = {}, $orderBy: [GoodOrderByInput!]! = [], $take: Int, $skip: Int! = 0) {
   goods(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
