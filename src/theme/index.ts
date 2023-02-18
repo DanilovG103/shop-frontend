@@ -1,12 +1,13 @@
-import { createGlobalStyle } from 'styled-components'
+import { css } from '@emotion/react'
 
 import { colors } from './colors'
 
 export const theme = {
   colors,
+  breakpoints: ['319px', '577px', '769px', '1023px', '1231px'],
 }
 
-export const GlobalStyles = createGlobalStyle`
+export const globalStyles = css`
   * {
     margin: 0;
     padding: 0;

@@ -1,4 +1,5 @@
-import styled, { CSSProperties } from 'styled-components'
+import type { CSSProperties } from 'react'
+import styled from '@emotion/styled'
 import {
   color,
   ColorProps,

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import Checkbox from '@material-ui/core/Checkbox'
+import Checkbox from '@mui/material/Checkbox'
 
 import { useFilterContext } from 'src/context'
 import { useBrandsQuery, useCategoriesQuery } from 'src/generated/graphql'

@@ -1,10 +1,11 @@
 import React, { useCallback, useMemo } from 'react'
-import { IconButton } from '@material-ui/core'
+import { useTheme } from '@emotion/react'
+import styled from '@emotion/styled'
+import IconButton from '@mui/material/IconButton'
 import { noop } from 'lodash'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import styled, { useTheme } from 'styled-components'
 
 import { useUserContext } from 'src/context'
 import { CartIcon, FavoriteIcon, UserIcon } from 'src/icons'
@@ -58,7 +59,6 @@ export const Layout = ({
   const { user, isAuthVisible, setIsAuthVisible } = useUserContext()
   const { pathname, push } = useRouter()
   const { colors } = useTheme()
-
   const onCartPress = useCallback(() => {
     if (!user) {
       return setIsAuthVisible(true)
@@ -98,7 +98,6 @@ export const Layout = ({
       <Head>
         <title>{title}</title>
       </Head>
-
       <Box
         display="flex"
         as="header"

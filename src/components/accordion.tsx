@@ -1,33 +1,28 @@
 import React, { ReactNode } from 'react'
-import MuiAccordion, { AccordionProps } from '@material-ui/core/Accordion'
+import ExpandMore from '@mui/icons-material/ExpandMore'
+import { styled } from '@mui/material'
+import MuiAccordion, { AccordionProps } from '@mui/material/Accordion'
 import AccordionDetails, {
   AccordionDetailsProps,
-} from '@material-ui/core/AccordionDetails'
+} from '@mui/material/AccordionDetails'
 import AccordionSummary, {
   AccordionSummaryProps,
-} from '@material-ui/core/AccordionSummary'
-import makeStyles from '@material-ui/core/styles/makeStyles'
-import ExpandMore from '@material-ui/icons/ExpandMore'
+} from '@mui/material/AccordionSummary'
 
 import { Text } from './text'
 
-const useStyles = makeStyles({
-  accordion: {
-    '& .MuiAccordionDetails-root': {
-      flexDirection: 'column',
-      marginTop: '0',
-    },
-    '& .MuiAccordionSummary-content': {
-      margin: '0',
-    },
-    '& .MuiAccordionSummary-content.Mui-expanded': {
-      margin: '0',
-    },
-    '& .MuiButtonBase-root.MuiAccordionSummary-root.Mui-expanded': {
-      minHeight: '48px',
-    },
-  },
-})
+const Details = styled(AccordionDetails)(() => ({
+  flexDirection: 'column',
+  marginTop: 0,
+  paddingTop: 0,
+}))
+
+const Summary = styled(AccordionSummary)(() => ({
+  minHeight: '36px !important',
+  justifyContent: 'space-between',
+  width: '100%',
+  padding: '0 12px',
+}))
 
 interface Props extends Omit<AccordionProps, 'children'> {
   children: ReactNode
@@ -43,14 +38,12 @@ export const Accordion = ({
   detailsProps,
   ...props
 }: Props) => {
-  const classes = useStyles()
-
   return (
-    <MuiAccordion defaultExpanded className={classes.accordion} {...props}>
-      <AccordionSummary {...summaryProps} expandIcon={<ExpandMore />}>
+    <MuiAccordion defaultExpanded {...props}>
+      <Summary {...summaryProps} expandIcon={<ExpandMore />}>
         <Text>{title}</Text>
-      </AccordionSummary>
-      <AccordionDetails {...detailsProps}>{children}</AccordionDetails>
+      </Summary>
+      <Details {...detailsProps}>{children}</Details>
     </MuiAccordion>
   )
 }

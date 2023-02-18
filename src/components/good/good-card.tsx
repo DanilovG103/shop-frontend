@@ -1,8 +1,9 @@
 import { MouseEventHandler, useCallback } from 'react'
-import { Card, IconButton, makeStyles } from '@material-ui/core'
+import { useTheme } from '@emotion/react'
+import styled from '@emotion/styled'
+import { Card, IconButton } from '@mui/material'
 import Image from 'next/image'
 import Link from 'next/link'
-import styled from 'styled-components'
 
 import { GoodsFragment } from 'src/generated/graphql'
 import { useGood } from 'src/hooks'
@@ -12,16 +13,13 @@ import { env } from 'src/utils'
 import { Box } from '../box'
 import { Text } from '../text'
 
-const useStyles = makeStyles({
-  icon: {
-    color: '#ffffff',
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
-    padding: '8px',
-    '&:hover': {
-      backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    },
-  },
-})
+const IconWrapper = styled(IconButton)`
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  padding: 8px !important;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.4) !important;
+  }
+`
 
 const ImageWrapper = styled(Box)`
   position: relative;
@@ -49,11 +47,11 @@ interface Props {
 }
 
 export const Good = ({ good, displayType = 'default' }: Props) => {
-  const styles = useStyles()
-  // const { isInFavorite, handleUpdateFavorite, handleUpdateBasket } = useGood({
-  //   inFavorite: good.isInFavorite,
-  //   inBasket: good.isInBasket,
-  // })
+  const { isInFavorite, handleUpdateFavorite, handleUpdateBasket } = useGood({
+    inFavorite: good.isInFavorite,
+    inBasket: good.isInBasket,
+  })
+  const { colors } = useTheme()
 
   const isDefault = displayType === 'default'
 
@@ -91,12 +89,15 @@ export const Good = ({ good, displayType = 'default' }: Props) => {
             <Img src={imageUri} alt={'image'} width={200} height={200} />
             {displayType === 'default' && (
               <IconsBox>
-                <IconButton className={styles.icon} onClick={onFavoriteClick}>
-                  <FavoriteIcon active />
-                </IconButton>
-                <IconButton className={styles.icon} onClick={onCartClick}>
-                  <CartIcon />
-                </IconButton>
+                <IconWrapper onClick={onFavoriteClick}>
+                  <FavoriteIcon
+                    color={colors.icons.secondary}
+                    active={isInFavorite}
+                  />
+                </IconWrapper>
+                <IconWrapper onClick={onCartClick}>
+                  <CartIcon color={colors.icons.secondary} />
+                </IconWrapper>
               </IconsBox>
             )}
           </ImageWrapper>
@@ -109,12 +110,4 @@ export const Good = ({ good, displayType = 'default' }: Props) => {
       </Card>
     </Link>
   )
-}
-
-function handleUpdateFavorite(id: string) {
-  throw new Error('Function not implemented.')
-}
-
-function handleUpdateBasket(id: string) {
-  throw new Error('Function not implemented.')
 }

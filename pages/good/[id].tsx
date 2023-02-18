@@ -1,9 +1,11 @@
+import 'react-responsive-carousel/lib/styles/carousel.min.css'
+
 import { MouseEventHandler, useCallback } from 'react'
-import Carousel from 'react-material-ui-carousel'
-import { Button, CircularProgress } from '@material-ui/core'
+import { Carousel } from 'react-responsive-carousel'
+import styled from '@emotion/styled'
+import { Button, CircularProgress } from '@mui/material'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import styled from 'styled-components'
 
 import { Box, Layout, Text } from 'src/components'
 import { useGood } from 'src/hooks'
@@ -48,7 +50,7 @@ export default function CurrentGoodPage() {
         <CircularProgress />
       ) : (
         <Box display="flex" flexDirection={['column', 'column', 'row']}>
-          <Carousel swipe timeout={350} autoPlay={false}>
+          <Carousel showStatus={false}>
             {data?.good?.images?.map((item) => (
               <Img
                 key={item.image?.id}

@@ -1,7 +1,7 @@
-import React, { ReactNode, useEffect } from 'react'
-import { Button, makeStyles } from '@material-ui/core'
+import React, { ReactNode } from 'react'
+import styled from '@emotion/styled'
+import { Button } from '@mui/material'
 import { useFormikContext } from 'formik'
-import styled from 'styled-components'
 
 import { AuthMutationVariables } from 'src/generated/graphql'
 
@@ -17,12 +17,10 @@ const Form = styled.form`
   width: 100%;
 `
 
-const useStyles = makeStyles({
-  submit: {
-    marginTop: '16px',
-    width: '100%',
-  },
-})
+const Submit = styled(Button)`
+  margin-top: 16px;
+  width: 100%;
+`
 
 interface Props {
   buttonText: string
@@ -39,7 +37,6 @@ export const BaseAuthForm = ({ buttonText, children }: Props) => {
     errors,
     values,
   } = useFormikContext<AuthMutationVariables>()
-  const classes = useStyles()
   const disabled = !dirty || !isValid
 
   return (
@@ -64,16 +61,15 @@ export const BaseAuthForm = ({ buttonText, children }: Props) => {
         error={!!errors.password}
         helperText={errors.password}
       />
-      <Button
+      <Submit
         type="submit"
         disabled={disabled}
-        className={classes.submit}
         disableElevation
         color="primary"
         variant="contained"
         size="medium">
         {buttonText}
-      </Button>
+      </Submit>
     </Form>
   )
 }

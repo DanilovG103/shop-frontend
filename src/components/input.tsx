@@ -1,17 +1,14 @@
 import React from 'react'
-import { makeStyles, TextField, TextFieldProps } from '@material-ui/core'
+import { styled } from '@mui/material'
+import TextField, { TextFieldProps } from '@mui/material/TextField'
 
-const useStyles = makeStyles({
-  input: {
-    '& .MuiFormHelperText-contained': {
-      margin: '3px 0 0',
-    },
-    width: '100%',
+const Field = styled(TextField)(() => ({
+  '& .MuiFormHelperText-contained': {
+    margin: '3px 0 0',
   },
-})
+  width: '100%',
+}))
 
 export const Input = (props: TextFieldProps) => {
-  const classes = useStyles()
-
-  return <TextField variant="outlined" className={classes.input} {...props} />
+  return <Field variant="outlined" {...props} />
 }

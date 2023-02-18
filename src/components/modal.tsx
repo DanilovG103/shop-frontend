@@ -1,9 +1,9 @@
-import { Dialog, DialogProps } from '@material-ui/core'
+import MUIModal, { ModalProps } from '@mui/material/Modal'
 
-export const Modal = ({ children, open, onClose, ...rest }: DialogProps) => {
+export const Modal = ({ children, open, onClose, ...rest }: ModalProps) => {
   return (
-    <Dialog disablePortal open={open} onClose={onClose} {...rest}>
+    <MUIModal disablePortal open={open} onClose={onClose} {...rest}>
       {children}
-    </Dialog>
+    </MUIModal>
   )
 }
