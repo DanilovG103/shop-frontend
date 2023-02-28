@@ -18,6 +18,11 @@ export type Scalars = {
   Upload: any;
 };
 
+export type Address = {
+  __typename?: 'Address';
+  value?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
 export type AuthenticatedItem = User;
 
 export type Basket = {
@@ -910,6 +915,7 @@ export type PasswordState = {
 
 export type Query = {
   __typename?: 'Query';
+  addresses?: Maybe<Address>;
   authenticatedItem?: Maybe<AuthenticatedItem>;
   basket?: Maybe<Basket>;
   baskets?: Maybe<Array<Basket>>;
@@ -936,6 +942,11 @@ export type Query = {
   user?: Maybe<User>;
   users?: Maybe<Array<User>>;
   usersCount?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryAddressesArgs = {
+  query?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1095,6 +1106,7 @@ export type Request = {
   goodsCount?: Maybe<Scalars['Int']>;
   id: Scalars['ID'];
   paymentType?: Maybe<RequestPaymentTypeType>;
+  phone?: Maybe<Scalars['String']>;
   recipientEmail?: Maybe<Scalars['String']>;
   recipientName?: Maybe<Scalars['String']>;
   rejectReason?: Maybe<Scalars['String']>;
@@ -1121,6 +1133,7 @@ export type RequestCreateInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   goods?: InputMaybe<GoodRelateToManyForCreateInput>;
   paymentType?: InputMaybe<RequestPaymentTypeType>;
+  phone?: InputMaybe<Scalars['String']>;
   recipientEmail?: InputMaybe<Scalars['String']>;
   recipientName?: InputMaybe<Scalars['String']>;
   rejectReason?: InputMaybe<Scalars['String']>;
@@ -1134,6 +1147,7 @@ export type RequestOrderByInput = {
   createdAt?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
   paymentType?: InputMaybe<OrderDirection>;
+  phone?: InputMaybe<OrderDirection>;
   recipientEmail?: InputMaybe<OrderDirection>;
   recipientName?: InputMaybe<OrderDirection>;
   rejectReason?: InputMaybe<OrderDirection>;
@@ -1178,6 +1192,7 @@ export type RequestUpdateInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   goods?: InputMaybe<GoodRelateToManyForUpdateInput>;
   paymentType?: InputMaybe<RequestPaymentTypeType>;
+  phone?: InputMaybe<Scalars['String']>;
   recipientEmail?: InputMaybe<Scalars['String']>;
   recipientName?: InputMaybe<Scalars['String']>;
   rejectReason?: InputMaybe<Scalars['String']>;
@@ -1195,6 +1210,7 @@ export type RequestWhereInput = {
   goods?: InputMaybe<GoodManyRelationFilter>;
   id?: InputMaybe<IdFilter>;
   paymentType?: InputMaybe<RequestPaymentTypeTypeNullableFilter>;
+  phone?: InputMaybe<StringFilter>;
   recipientEmail?: InputMaybe<StringFilter>;
   recipientName?: InputMaybe<StringFilter>;
   rejectReason?: InputMaybe<StringFilter>;
@@ -1363,6 +1379,13 @@ export type RegistrationMutationVariables = Exact<{
 
 
 export type RegistrationMutation = { __typename?: 'Mutation', registration?: { __typename?: 'UserAuthenticationWithPasswordFailure' } | { __typename?: 'UserAuthenticationWithPasswordSuccess', sessionToken: string, item: { __typename?: 'User', id: string, name?: string, email?: string, basketId?: string, favoritesId?: string } } };
+
+export type AddressesQueryVariables = Exact<{
+  query?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type AddressesQuery = { __typename?: 'Query', addresses?: { __typename?: 'Address', value?: Array<string> } };
 
 export type BrandsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1641,6 +1664,41 @@ export function useRegistrationMutation(baseOptions?: Apollo.MutationHookOptions
 export type RegistrationMutationHookResult = ReturnType<typeof useRegistrationMutation>;
 export type RegistrationMutationResult = Apollo.MutationResult<RegistrationMutation>;
 export type RegistrationMutationOptions = Apollo.BaseMutationOptions<RegistrationMutation, RegistrationMutationVariables>;
+export const AddressesDocument = gql`
+    query Addresses($query: String) {
+  addresses(query: $query) {
+    value
+  }
+}
+    `;
+
+/**
+ * __useAddressesQuery__
+ *
+ * To run a query within a React component, call `useAddressesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAddressesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAddressesQuery({
+ *   variables: {
+ *      query: // value for 'query'
+ *   },
+ * });
+ */
+export function useAddressesQuery(baseOptions?: Apollo.QueryHookOptions<AddressesQuery, AddressesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AddressesQuery, AddressesQueryVariables>(AddressesDocument, options);
+      }
+export function useAddressesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AddressesQuery, AddressesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AddressesQuery, AddressesQueryVariables>(AddressesDocument, options);
+        }
+export type AddressesQueryHookResult = ReturnType<typeof useAddressesQuery>;
+export type AddressesLazyQueryHookResult = ReturnType<typeof useAddressesLazyQuery>;
+export type AddressesQueryResult = Apollo.QueryResult<AddressesQuery, AddressesQueryVariables>;
 export const BrandsDocument = gql`
     query Brands {
   brands {
