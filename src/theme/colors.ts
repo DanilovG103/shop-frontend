@@ -1,3 +1,5 @@
+import { pink } from '@mui/material/colors'
+
 export const colors = {
   bg_primary: '#FFFFFF',
   text_primary: '#000000',
@@ -7,5 +9,6 @@ export const colors = {
   icons: {
     primary: '#000000',
     secondary: '#ffffff',
+    favorite: pink['500'],
   },
 }

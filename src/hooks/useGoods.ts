@@ -9,7 +9,6 @@ import {
 
 export const useGoods = ({ orderBy, where }: GoodsQueryVariables) => {
   const { brandsIds, categoryIds } = useFilterContext()
-
   const whereInput: GoodsQueryVariables['where'] = useMemo(
     () => ({
       brand: brandsIds.length ? { id: { in: brandsIds } } : undefined,
@@ -38,26 +37,25 @@ export const useGoods = ({ orderBy, where }: GoodsQueryVariables) => {
     },
   })
 
-  const fetchMore = useCallback(
-    async (skip: number) => {
-      await loadMore({
-        variables: {
-          take: 12,
-          skip,
-          where: whereInput,
-        },
-        updateQuery(previousQueryResult, { fetchMoreResult }) {
-          return {
-            goods: [
-              ...(previousQueryResult?.goods ?? []),
-              ...(fetchMoreResult?.goods ?? []),
-            ],
-          }
-        },
-      })
-    },
-    [loadMore, whereInput],
-  )
+  const fetchMore = useCallback(async () => {
+    if (!data?.goods || !countData) return
+    if (data.goods.length === countData.goodsCount && loading) return
+    await loadMore({
+      variables: {
+        take: 12,
+        skip: data.goods.length,
+        where: whereInput,
+      },
+      updateQuery(previousQueryResult, { fetchMoreResult }) {
+        return {
+          goods: [
+            ...(previousQueryResult?.goods ?? []),
+            ...(fetchMoreResult?.goods ?? []),
+          ],
+        }
+      },
+    })
+  }, [countData, data?.goods, loadMore, loading, whereInput])
 
   return {
     data: data?.goods,

@@ -1,14 +1,15 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
+import { useMediaQuery } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
-import { noop } from 'lodash'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import { useUserContext } from 'src/context'
 import { CartIcon, FavoriteIcon, UserIcon } from 'src/icons'
+import { muiTheme } from 'src/theme'
 import { Route } from 'src/utils'
 
 import { Aside } from './aside'
@@ -56,41 +57,63 @@ export const Layout = ({
   withAside = true,
   withTitle = true,
 }: Props) => {
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'))
   const { user, isAuthVisible, setIsAuthVisible } = useUserContext()
-  const { pathname, push } = useRouter()
+  const { pathname, push, beforePopState } = useRouter()
   const { colors } = useTheme()
-  const onCartPress = useCallback(() => {
-    if (!user) {
-      return setIsAuthVisible(true)
-    }
 
-    return push(Route.basket)
-  }, [push, setIsAuthVisible, user])
+  const onIconPress = useCallback(
+    (route: string) => {
+      if (!user) {
+        if (isMobile) {
+          push(pathname, 'auth')
+        }
 
-  const onUserPress = useCallback(() => {
-    if (!user) {
-      return setIsAuthVisible(true)
-    }
+        return setIsAuthVisible(true)
+      }
 
-    return push(Route.me)
-  }, [push, setIsAuthVisible, user])
+      return push(route)
+    },
+    [isMobile, pathname, push, setIsAuthVisible, user],
+  )
+
+  const onBasketClick = useCallback(() => {
+    onIconPress(Route.basket)
+  }, [onIconPress])
+
+  const onUserClick = useCallback(() => {
+    onIconPress(Route.me)
+  }, [onIconPress])
+
+  const onFavoriteClick = useCallback(() => {
+    onIconPress(Route.favorites)
+  }, [onIconPress])
+
+  useEffect(() => {
+    if (!isMobile) return
+    beforePopState(() => {
+      setIsAuthVisible(false)
+
+      return true
+    })
+  }, [beforePopState, isMobile, setIsAuthVisible])
 
   const icons = useMemo(
     () => [
       {
         component: FavoriteIcon,
-        onClick: noop,
+        onClick: onFavoriteClick,
       },
       {
         component: CartIcon,
-        onClick: onCartPress,
+        onClick: onBasketClick,
       },
       {
         component: UserIcon,
-        onClick: onUserPress,
+        onClick: onUserClick,
       },
     ],
-    [onCartPress, onUserPress],
+    [onBasketClick, onFavoriteClick, onUserClick],
   )
 
   return (
@@ -105,7 +128,7 @@ export const Layout = ({
         borderBottomColor="header_border"
         borderBottomStyle="solid"
         p="24px"
-        bg="bg_primary">
+        bg={['green', 'red', 'bg_primary']}>
         <Box
           width="100%"
           display="flex"
@@ -134,7 +157,7 @@ export const Layout = ({
           </Box>
         </Box>
       </Box>
-      <Box display="flex" p="32px">
+      <Box display="flex" flexDirection={['column', 'column', 'row']} p="32px">
         {withAside && <Aside />}
         <Box
           m="0 auto"
@@ -145,7 +168,12 @@ export const Layout = ({
           {children}
         </Box>
       </Box>
-      <AuthModal open={isAuthVisible} onClose={() => setIsAuthVisible(false)} />
+      {isAuthVisible && (
+        <AuthModal
+          open={isAuthVisible}
+          onClose={() => setIsAuthVisible(false)}
+        />
+      )}
     </>
   )
 }

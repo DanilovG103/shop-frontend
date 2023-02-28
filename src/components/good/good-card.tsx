@@ -7,7 +7,7 @@ import Link from 'next/link'
 
 import { GoodsFragment } from 'src/generated/graphql'
 import { useGood } from 'src/hooks'
-import { CartIcon, FavoriteIcon } from 'src/icons'
+import { FavoriteIcon } from 'src/icons'
 import { env } from 'src/utils'
 
 import { Box } from '../box'
@@ -31,13 +31,8 @@ const Img = styled(Image)`
 
 const IconsBox = styled(Box)`
   position: absolute;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: space-between;
   right: 0px;
   top: 0px;
-  height: 200px;
   padding: 6px;
 `
 
@@ -47,22 +42,14 @@ interface Props {
 }
 
 export const Good = ({ good, displayType = 'default' }: Props) => {
-  const { isInFavorite, handleUpdateFavorite, handleUpdateBasket } = useGood({
+  const { isInFavorite, handleUpdateFavorite } = useGood({
     inFavorite: good.isInFavorite,
     inBasket: good.isInBasket,
   })
+
   const { colors } = useTheme()
 
   const isDefault = displayType === 'default'
-
-  const onCartClick: MouseEventHandler<HTMLButtonElement> = useCallback(
-    (event) => {
-      event.preventDefault()
-
-      handleUpdateBasket(good.id)
-    },
-    [good.id, handleUpdateBasket],
-  )
 
   const onFavoriteClick: MouseEventHandler<HTMLButtonElement> = useCallback(
     (event) => {
@@ -91,12 +78,9 @@ export const Good = ({ good, displayType = 'default' }: Props) => {
               <IconsBox>
                 <IconWrapper onClick={onFavoriteClick}>
                   <FavoriteIcon
-                    color={colors.icons.secondary}
+                    color={colors.icons.favorite}
                     active={isInFavorite}
                   />
-                </IconWrapper>
-                <IconWrapper onClick={onCartClick}>
-                  <CartIcon color={colors.icons.secondary} />
                 </IconWrapper>
               </IconsBox>
             )}

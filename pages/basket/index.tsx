@@ -1,9 +1,10 @@
 import styled from '@emotion/styled'
-import { Button } from '@mui/material'
+import Link from 'next/link'
 
 import { Box, Good, Layout, Text } from 'src/components'
 import { useUserContext } from 'src/context'
-import { useBasketQuery } from 'src/generated/graphql'
+import { useBasketQuery } from 'src/generated'
+import { Route } from 'src/utils'
 
 const GoodsWrapper = styled(Box)`
   display: flex;
@@ -14,6 +15,7 @@ const GoodsWrapper = styled(Box)`
 
 export default function BasketPage() {
   const { user } = useUserContext()
+
   const { data } = useBasketQuery({
     variables: {
       where: {
@@ -39,9 +41,11 @@ export default function BasketPage() {
             </Box>
           )}
         </GoodsWrapper>
-        <Box maxWidth="230px" width="100%">
-          <Button>Оформить заказ</Button>
-        </Box>
+        {!!goods.length && (
+          <Box maxWidth="230px" width="100%">
+            <Link href={Route.request_create}>Оформить заказ</Link>
+          </Box>
+        )}
       </Box>
     </Layout>
   )

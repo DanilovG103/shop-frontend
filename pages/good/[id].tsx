@@ -2,6 +2,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css'
 
 import { MouseEventHandler, useCallback } from 'react'
 import { Carousel } from 'react-responsive-carousel'
+import { useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Button, CircularProgress } from '@mui/material'
 import Image from 'next/image'
@@ -18,7 +19,7 @@ const Img = styled(Image)`
 
 export default function CurrentGoodPage() {
   const { query } = useRouter()
-
+  const { colors } = useTheme()
   const {
     isInBasket,
     isInFavorite,
@@ -50,7 +51,7 @@ export default function CurrentGoodPage() {
         <CircularProgress />
       ) : (
         <Box display="flex" flexDirection={['column', 'column', 'row']}>
-          <Carousel showStatus={false}>
+          <Carousel width={600} showStatus={false}>
             {data?.good?.images?.map((item) => (
               <Img
                 key={item.image?.id}
@@ -66,7 +67,12 @@ export default function CurrentGoodPage() {
             <Text>{data?.good?.description}</Text>
             <Button
               onClick={updateFavorite}
-              startIcon={<FavoriteIcon active={isInFavorite} />}>
+              startIcon={
+                <FavoriteIcon
+                  color={colors.icons.favorite}
+                  active={isInFavorite}
+                />
+              }>
               {!isInFavorite ? 'Добавить в избранное' : 'Удалить из избранного'}
             </Button>
             <Button onClick={updateBasket} startIcon={<CartIcon />}>

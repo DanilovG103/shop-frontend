@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
 
 import { useUserContext } from 'src/context'
@@ -17,23 +17,11 @@ interface Props {
 export const useGood = ({ id, inFavorite, inBasket }: Props) => {
   const { user, setIsAuthVisible } = useUserContext()
 
-  const [isInFavorite, setIsInFavorite] = useState(() => {
-    if (!id) {
-      return !!inFavorite
-    }
-
-    return false
-  })
+  const [isInFavorite, setIsInFavorite] = useState(false)
 
   const [updateFavorite] = useFavoriteUpdateMutation()
 
-  const [isInBasket, setIsInBasket] = useState(() => {
-    if (!id) {
-      return !!inBasket
-    }
-
-    return false
-  })
+  const [isInBasket, setIsInBasket] = useState(false)
 
   const [updateBasket] = useBasketUpdateMutation()
 
@@ -53,6 +41,19 @@ export const useGood = ({ id, inFavorite, inBasket }: Props) => {
   useEffect(() => {
     getGoodById()
   }, [getGoodById])
+
+  const setValues = useCallback(() => {
+    setIsInBasket(id ? false : !!inBasket)
+    setIsInFavorite(id ? false : !!inFavorite)
+  }, [id, inBasket, inFavorite])
+
+  useEffect(() => {
+    setIsInBasket(!!inBasket)
+  }, [inBasket])
+
+  useEffect(() => {
+    setValues()
+  }, [setValues])
 
   const handleUpdateBasket = useCallback(
     (goodId = '') => {
@@ -96,12 +97,24 @@ export const useGood = ({ id, inFavorite, inBasket }: Props) => {
     [id, setIsAuthVisible, updateFavorite, user],
   )
 
-  return {
-    isInFavorite,
-    isInBasket,
-    handleUpdateFavorite,
-    handleUpdateBasket,
-    data,
-    loading,
-  }
+  const value = useMemo(
+    () => ({
+      isInFavorite,
+      isInBasket,
+      handleUpdateFavorite,
+      handleUpdateBasket,
+      data,
+      loading,
+    }),
+    [
+      data,
+      handleUpdateBasket,
+      handleUpdateFavorite,
+      isInBasket,
+      isInFavorite,
+      loading,
+    ],
+  )
+
+  return value
 }

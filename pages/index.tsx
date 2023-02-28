@@ -3,7 +3,7 @@ import { OrderDirection } from 'src/generated/graphql'
 import { useGoods } from 'src/hooks'
 
 export default function Home() {
-  const { data, loading, total } = useGoods({
+  const { data, fetchMore } = useGoods({
     orderBy: {
       createdAt: OrderDirection.Desc,
     },
@@ -11,7 +11,7 @@ export default function Home() {
 
   return (
     <Layout title="Новинки">
-      <GoodList goods={data ?? []} />
+      <GoodList goods={data ?? []} fetchMore={fetchMore} />
     </Layout>
   )
 }

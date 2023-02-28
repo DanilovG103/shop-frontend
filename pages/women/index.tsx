@@ -3,7 +3,7 @@ import { GoodAudienceCategoryType } from 'src/generated/graphql'
 import { useGoods } from 'src/hooks'
 
 export default function WomenPage() {
-  const { data, total } = useGoods({
+  const { data, fetchMore } = useGoods({
     where: {
       audienceCategory: { equals: GoodAudienceCategoryType.Female },
     },
@@ -11,7 +11,7 @@ export default function WomenPage() {
 
   return (
     <Layout title="Женская одежда">
-      <GoodList goods={data ?? []} />
+      <GoodList goods={data ?? []} fetchMore={fetchMore} />
     </Layout>
   )
 }

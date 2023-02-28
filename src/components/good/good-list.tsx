@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import styled from '@emotion/styled'
 
 import type { GoodsFragment } from 'src/generated/graphql'
@@ -8,6 +8,7 @@ import { Good as GoodCard } from './good-card'
 
 interface Props {
   goods: GoodsFragment[]
+  fetchMore?(): Promise<void> | void
 }
 
 const CardContainer = styled(Box)`
@@ -18,12 +19,34 @@ const CardContainer = styled(Box)`
   margin-top: 20px;
 `
 
-export const GoodList = ({ goods }: Props) => {
+export const GoodList = ({ goods, fetchMore }: Props) => {
+  const intersectionRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!fetchMore) return
+    const element = intersectionRef.current
+    if (!element) return
+    const observer = new IntersectionObserver(async ([entry]) => {
+      if (entry.isIntersecting) {
+        await fetchMore()
+      }
+    })
+
+    observer.observe(element)
+
+    return () => {
+      observer.unobserve(element)
+    }
+  }, [fetchMore])
+
   return (
-    <CardContainer>
-      {goods?.map((item) => (
-        <GoodCard key={item.id} good={item} />
-      ))}
-    </CardContainer>
+    <>
+      <CardContainer>
+        {goods?.map((item) => (
+          <GoodCard key={item.id} good={item} />
+        ))}
+      </CardContainer>
+      <Box width="100%" height="1px" ref={intersectionRef} />
+    </>
   )
 }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { ApolloError } from '@apollo/client'
+import type { ApolloError } from '@apollo/client'
+import { styled } from '@mui/material'
 import { Formik, FormikHelpers } from 'formik'
 
 import { useUserContext } from 'src/context'
@@ -8,12 +9,12 @@ import {
   RegistrationMutationVariables,
   useAuthMutation,
   useRegistrationMutation,
-} from 'src/generated/graphql'
+} from 'src/generated'
 import { authSchema, registrationSchema } from 'src/schema'
 
 import { AuthForm } from './auth'
 import { Box } from './box'
-import { Modal } from './modal'
+import { Modal as BaseModal } from './modal'
 import { RegistrationForm } from './registration'
 import { Text } from './text'
 
@@ -37,6 +38,13 @@ interface Props {
   onClose(): void
 }
 
+const Modal = styled(BaseModal)(() => ({
+  display: 'flex',
+  height: '100%',
+  alignItems: 'center',
+  justifyContent: 'center',
+}))
+
 export const AuthModal = ({ open, onClose }: Props) => {
   const [isAuth, setIsAuth] = useState(true)
   const [auth] = useAuthMutation()
@@ -47,7 +55,9 @@ export const AuthModal = ({ open, onClose }: Props) => {
     values: AuthMutationVariables,
     helpers: FormikHelpers<AuthMutationVariables>,
   ) => {
-    const { data } = await auth({ variables: values })
+    const { data } = await auth({
+      variables: values,
+    })
 
     if (
       data?.authenticateUserWithPassword?.__typename ===
@@ -85,6 +95,7 @@ export const AuthModal = ({ open, onClose }: Props) => {
   return (
     <Modal open={open} onClose={onClose}>
       <Box
+        bg="bg_primary"
         p="32px"
         display="flex"
         flexDirection="column"

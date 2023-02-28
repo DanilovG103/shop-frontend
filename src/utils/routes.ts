@@ -5,4 +5,7 @@ export enum Route {
   kids = '/kids',
   basket = '/basket',
   me = '/me',
+  favorites = '/favorites',
+  request = '/requests',
+  request_create = '/requests/create',
 }

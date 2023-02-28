@@ -11,6 +11,10 @@ import AccordionSummary, {
 
 import { Text } from './text'
 
+const Root = styled(MuiAccordion)(() => ({
+  width: '100%',
+}))
+
 const Details = styled(AccordionDetails)(() => ({
   flexDirection: 'column',
   marginTop: 0,
@@ -39,11 +43,11 @@ export const Accordion = ({
   ...props
 }: Props) => {
   return (
-    <MuiAccordion defaultExpanded {...props}>
+    <Root defaultExpanded {...props}>
       <Summary {...summaryProps} expandIcon={<ExpandMore />}>
         <Text>{title}</Text>
       </Summary>
       <Details {...detailsProps}>{children}</Details>
-    </MuiAccordion>
+    </Root>
   )
 }

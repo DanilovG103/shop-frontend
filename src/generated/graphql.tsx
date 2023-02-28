@@ -237,7 +237,6 @@ export type Good = {
   audienceCategory?: Maybe<GoodAudienceCategoryType>;
   brand?: Maybe<Brand>;
   category?: Maybe<Category>;
-  count?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
@@ -279,7 +278,6 @@ export type GoodCreateInput = {
   audienceCategory?: InputMaybe<GoodAudienceCategoryType>;
   brand?: InputMaybe<BrandRelateToOneForCreateInput>;
   category?: InputMaybe<CategoryRelateToOneForCreateInput>;
-  count?: InputMaybe<Scalars['Int']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageRelateToManyForCreateInput>;
@@ -295,7 +293,6 @@ export type GoodManyRelationFilter = {
 
 export type GoodOrderByInput = {
   audienceCategory?: InputMaybe<OrderDirection>;
-  count?: InputMaybe<OrderDirection>;
   createdAt?: InputMaybe<OrderDirection>;
   description?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
@@ -324,7 +321,6 @@ export type GoodUpdateInput = {
   audienceCategory?: InputMaybe<GoodAudienceCategoryType>;
   brand?: InputMaybe<BrandRelateToOneForUpdateInput>;
   category?: InputMaybe<CategoryRelateToOneForUpdateInput>;
-  count?: InputMaybe<Scalars['Int']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageRelateToManyForUpdateInput>;
@@ -339,7 +335,6 @@ export type GoodWhereInput = {
   audienceCategory?: InputMaybe<GoodAudienceCategoryTypeNullableFilter>;
   brand?: InputMaybe<BrandWhereInput>;
   category?: InputMaybe<CategoryWhereInput>;
-  count?: InputMaybe<IntFilter>;
   createdAt?: InputMaybe<DateTimeNullableFilter>;
   description?: InputMaybe<StringFilter>;
   id?: InputMaybe<IdFilter>;
@@ -1094,11 +1089,18 @@ export enum QueryMode {
 
 export type Request = {
   __typename?: 'Request';
+  address?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
   goods?: Maybe<Array<Good>>;
   goodsCount?: Maybe<Scalars['Int']>;
   id: Scalars['ID'];
+  paymentType?: Maybe<RequestPaymentTypeType>;
+  recipientEmail?: Maybe<Scalars['String']>;
+  recipientName?: Maybe<Scalars['String']>;
   rejectReason?: Maybe<Scalars['String']>;
   status?: Maybe<RequestStatusType>;
+  sum?: Maybe<Scalars['Int']>;
+  user?: Maybe<User>;
 };
 
 
@@ -1115,18 +1117,45 @@ export type RequestGoodsCountArgs = {
 };
 
 export type RequestCreateInput = {
+  address?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
   goods?: InputMaybe<GoodRelateToManyForCreateInput>;
+  paymentType?: InputMaybe<RequestPaymentTypeType>;
+  recipientEmail?: InputMaybe<Scalars['String']>;
+  recipientName?: InputMaybe<Scalars['String']>;
   rejectReason?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<RequestStatusType>;
+  sum?: InputMaybe<Scalars['Int']>;
+  user?: InputMaybe<UserRelateToOneForCreateInput>;
 };
 
 export type RequestOrderByInput = {
+  address?: InputMaybe<OrderDirection>;
+  createdAt?: InputMaybe<OrderDirection>;
   id?: InputMaybe<OrderDirection>;
+  paymentType?: InputMaybe<OrderDirection>;
+  recipientEmail?: InputMaybe<OrderDirection>;
+  recipientName?: InputMaybe<OrderDirection>;
   rejectReason?: InputMaybe<OrderDirection>;
   status?: InputMaybe<OrderDirection>;
+  sum?: InputMaybe<OrderDirection>;
+};
+
+export enum RequestPaymentTypeType {
+  Online = 'ONLINE',
+  Receiving = 'RECEIVING'
+}
+
+export type RequestPaymentTypeTypeNullableFilter = {
+  equals?: InputMaybe<RequestPaymentTypeType>;
+  in?: InputMaybe<Array<RequestPaymentTypeType>>;
+  not?: InputMaybe<RequestPaymentTypeTypeNullableFilter>;
+  notIn?: InputMaybe<Array<RequestPaymentTypeType>>;
 };
 
 export enum RequestStatusType {
+  Cancelled = 'CANCELLED',
+  Delivered = 'DELIVERED',
   Fulfilled = 'FULFILLED',
   Pending = 'PENDING',
   Rejected = 'REJECTED'
@@ -1145,19 +1174,33 @@ export type RequestUpdateArgs = {
 };
 
 export type RequestUpdateInput = {
+  address?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
   goods?: InputMaybe<GoodRelateToManyForUpdateInput>;
+  paymentType?: InputMaybe<RequestPaymentTypeType>;
+  recipientEmail?: InputMaybe<Scalars['String']>;
+  recipientName?: InputMaybe<Scalars['String']>;
   rejectReason?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<RequestStatusType>;
+  sum?: InputMaybe<Scalars['Int']>;
+  user?: InputMaybe<UserRelateToOneForUpdateInput>;
 };
 
 export type RequestWhereInput = {
   AND?: InputMaybe<Array<RequestWhereInput>>;
   NOT?: InputMaybe<Array<RequestWhereInput>>;
   OR?: InputMaybe<Array<RequestWhereInput>>;
+  address?: InputMaybe<StringFilter>;
+  createdAt?: InputMaybe<DateTimeNullableFilter>;
   goods?: InputMaybe<GoodManyRelationFilter>;
   id?: InputMaybe<IdFilter>;
+  paymentType?: InputMaybe<RequestPaymentTypeTypeNullableFilter>;
+  recipientEmail?: InputMaybe<StringFilter>;
+  recipientName?: InputMaybe<StringFilter>;
   rejectReason?: InputMaybe<StringFilter>;
   status?: InputMaybe<RequestStatusTypeNullableFilter>;
+  sum?: InputMaybe<IntFilter>;
+  user?: InputMaybe<UserWhereInput>;
 };
 
 export type RequestWhereUniqueInput = {
@@ -1297,6 +1340,13 @@ export type BasketUpdateMutationVariables = Exact<{
 
 export type BasketUpdateMutation = { __typename?: 'Mutation', updateMyBasket?: { __typename?: 'Good', id: string, isInBasket?: boolean } };
 
+export type RequestMutationVariables = Exact<{
+  data: RequestCreateInput;
+}>;
+
+
+export type RequestMutation = { __typename?: 'Mutation', createRequest?: { __typename?: 'Request', id: string } };
+
 export type AuthMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
@@ -1366,6 +1416,20 @@ export type FavoriteQueryVariables = Exact<{
 
 
 export type FavoriteQuery = { __typename?: 'Query', favorite?: { __typename?: 'Favorite', goodsCount?: number, goods?: Array<{ __typename?: 'Good', id: string, title?: string, price?: number, isInBasket?: boolean, isInFavorite?: boolean, brand?: { __typename?: 'Brand', title?: string }, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', id: string, url: string } }> }> } };
+
+export type RequestsQueryVariables = Exact<{
+  where?: RequestWhereInput;
+}>;
+
+
+export type RequestsQuery = { __typename?: 'Query', requests?: Array<{ __typename?: 'Request', id: string, status?: RequestStatusType, createdAt?: any }> };
+
+export type RequestByIdQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type RequestByIdQuery = { __typename?: 'Query', request?: { __typename?: 'Request', id: string, status?: RequestStatusType, goodsCount?: number, createdAt?: any, goods?: Array<{ __typename?: 'Good', id: string, title?: string, price?: number, isInBasket?: boolean, isInFavorite?: boolean, brand?: { __typename?: 'Brand', title?: string }, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', id: string, url: string } }> }> } };
 
 export const GoodsFragmentDoc = gql`
     fragment goods on Good {
@@ -1462,6 +1526,39 @@ export function useBasketUpdateMutation(baseOptions?: Apollo.MutationHookOptions
 export type BasketUpdateMutationHookResult = ReturnType<typeof useBasketUpdateMutation>;
 export type BasketUpdateMutationResult = Apollo.MutationResult<BasketUpdateMutation>;
 export type BasketUpdateMutationOptions = Apollo.BaseMutationOptions<BasketUpdateMutation, BasketUpdateMutationVariables>;
+export const RequestDocument = gql`
+    mutation Request($data: RequestCreateInput!) {
+  createRequest(data: $data) {
+    id
+  }
+}
+    `;
+export type RequestMutationFn = Apollo.MutationFunction<RequestMutation, RequestMutationVariables>;
+
+/**
+ * __useRequestMutation__
+ *
+ * To run a mutation, you first call `useRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [requestMutation, { data, loading, error }] = useRequestMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useRequestMutation(baseOptions?: Apollo.MutationHookOptions<RequestMutation, RequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RequestMutation, RequestMutationVariables>(RequestDocument, options);
+      }
+export type RequestMutationHookResult = ReturnType<typeof useRequestMutation>;
+export type RequestMutationResult = Apollo.MutationResult<RequestMutation>;
+export type RequestMutationOptions = Apollo.BaseMutationOptions<RequestMutation, RequestMutationVariables>;
 export const AuthDocument = gql`
     mutation Auth($email: String!, $password: String!) {
   authenticateUserWithPassword(email: $email, password: $password) {
@@ -1834,3 +1931,81 @@ export function useFavoriteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<F
 export type FavoriteQueryHookResult = ReturnType<typeof useFavoriteQuery>;
 export type FavoriteLazyQueryHookResult = ReturnType<typeof useFavoriteLazyQuery>;
 export type FavoriteQueryResult = Apollo.QueryResult<FavoriteQuery, FavoriteQueryVariables>;
+export const RequestsDocument = gql`
+    query Requests($where: RequestWhereInput! = {}) {
+  requests(where: $where) {
+    id
+    status
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useRequestsQuery__
+ *
+ * To run a query within a React component, call `useRequestsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRequestsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useRequestsQuery(baseOptions?: Apollo.QueryHookOptions<RequestsQuery, RequestsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RequestsQuery, RequestsQueryVariables>(RequestsDocument, options);
+      }
+export function useRequestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RequestsQuery, RequestsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RequestsQuery, RequestsQueryVariables>(RequestsDocument, options);
+        }
+export type RequestsQueryHookResult = ReturnType<typeof useRequestsQuery>;
+export type RequestsLazyQueryHookResult = ReturnType<typeof useRequestsLazyQuery>;
+export type RequestsQueryResult = Apollo.QueryResult<RequestsQuery, RequestsQueryVariables>;
+export const RequestByIdDocument = gql`
+    query RequestById($id: ID!) {
+  request(where: {id: $id}) {
+    id
+    status
+    goods {
+      ...goods
+    }
+    goodsCount
+    createdAt
+  }
+}
+    ${GoodsFragmentDoc}`;
+
+/**
+ * __useRequestByIdQuery__
+ *
+ * To run a query within a React component, call `useRequestByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRequestByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRequestByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRequestByIdQuery(baseOptions: Apollo.QueryHookOptions<RequestByIdQuery, RequestByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RequestByIdQuery, RequestByIdQueryVariables>(RequestByIdDocument, options);
+      }
+export function useRequestByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RequestByIdQuery, RequestByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RequestByIdQuery, RequestByIdQueryVariables>(RequestByIdDocument, options);
+        }
+export type RequestByIdQueryHookResult = ReturnType<typeof useRequestByIdQuery>;
+export type RequestByIdLazyQueryHookResult = ReturnType<typeof useRequestByIdLazyQuery>;
+export type RequestByIdQueryResult = Apollo.QueryResult<RequestByIdQuery, RequestByIdQueryVariables>;
