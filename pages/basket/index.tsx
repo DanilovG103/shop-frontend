@@ -28,7 +28,7 @@ export default function BasketPage() {
   const goods = data?.basket?.goods ?? []
 
   return (
-    <Layout title="Корзина" withAside={false} withTitle={false}>
+    <Layout title="Корзина" withAside={false} >
       <Box display="flex" width="100%">
         <GoodsWrapper>
           {goods.length ? (

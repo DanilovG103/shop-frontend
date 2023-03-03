@@ -7,15 +7,25 @@ import {
   useGoodsQuery,
 } from 'src/generated'
 
+interface Value {
+  id: string
+}
+
+const mapToIds = (array: Value[]) => {
+  return array.map((el) => el.id)
+}
+
 export const useGoods = ({ orderBy, where }: GoodsQueryVariables) => {
-  const { brandsIds, categoryIds } = useFilterContext()
+  const { brands, categories } = useFilterContext()
   const whereInput: GoodsQueryVariables['where'] = useMemo(
     () => ({
-      brand: brandsIds.length ? { id: { in: brandsIds } } : undefined,
-      category: categoryIds.length ? { id: { in: categoryIds } } : undefined,
+      brand: brands.length ? { id: { in: mapToIds(brands) } } : undefined,
+      category: categories.length
+        ? { id: { in: mapToIds(categories) } }
+        : undefined,
       ...where,
     }),
-    [brandsIds, categoryIds, where],
+    [brands, categories, where],
   )
 
   const {

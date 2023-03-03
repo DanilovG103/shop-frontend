@@ -57,7 +57,7 @@ export default function CreateRequestPage() {
   )
 
   return (
-    <Layout title="Создание заказа" withAside={false} withTitle={false}>
+    <Layout title="Создание заказа" withAside={false} >
       <Formik
         initialValues={initialValues}
         onSubmit={handleSubmit}

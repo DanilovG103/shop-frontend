@@ -20,7 +20,6 @@ interface Props {
   title: string
   children: React.ReactNode
   withAside?: boolean
-  withTitle?: boolean
 }
 
 const routes = [
@@ -50,12 +49,7 @@ const Links = styled.ul`
   align-items: center;
 `
 
-export const Layout = ({
-  title,
-  children,
-  withAside = true,
-  withTitle = true,
-}: Props) => {
+export const Layout = ({ title, children, withAside = true }: Props) => {
   const isMobile = useMediaQuery(muiTheme.breakpoints?.down?.('sm') ?? '')
   const { user, isAuthVisible, setIsAuthVisible } = useUserContext()
   const { pathname, push, beforePopState } = useRouter()
@@ -125,17 +119,14 @@ export const Layout = ({
         borderBottomWidth="1px"
         borderBottomColor="header_border"
         borderBottomStyle="solid"
-        p="24px"
-        bg={{ sm: 'red', xl: 'bg_primary' }}
-        // bg={['green', 'red', 'bg_primary']}
-      >
+        p="24px">
         <Box
           width="100%"
           display="flex"
           as="nav"
           justifyContent="space-between"
           alignItems="center">
-          <Box width={120} />
+          <Box width="120px" />
           <Links>
             {routes.map((route, i) => (
               <Link key={i} href={route.to}>
@@ -157,14 +148,12 @@ export const Layout = ({
           </Box>
         </Box>
       </Box>
-      <Box display="flex" flexDirection={{ sm: 'column', xl: 'row' }} p="32px">
+      <Box
+        display="flex"
+        flexDirection={{ xs: 'column', md: 'row', xl: 'row' }}
+        p="32px">
         {withAside && <Aside />}
-        <Box
-          m="0 auto"
-          pl={withAside ? '12px' : '0'}
-          width="100%"
-          maxWidth={'1140px'}>
-          {withTitle && <Text>{title}</Text>}
+        <Box pl={withAside ? '12px' : '0'} width="100%" maxWidth={'1440px'}>
           {children}
         </Box>
       </Box>

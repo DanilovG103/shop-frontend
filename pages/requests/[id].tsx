@@ -15,7 +15,7 @@ export default function RequestPage() {
     <Layout
       title={`Заказ №${query.id ?? ''}`}
       withAside={false}
-      withTitle={false}>
+      >
       <div />
     </Layout>
   )

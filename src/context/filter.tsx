@@ -8,18 +8,23 @@ import {
 } from 'react'
 import noop from 'lodash/noop'
 
+interface State {
+  id: string
+  title: string
+}
+
 interface Values {
-  brandsIds: string[]
-  setBrandsIds(val: string): void
-  categoryIds: string[]
-  setCategoriesIds(val: string): void
+  brands: State[]
+  setBrands(val: State): void
+  categories: State[]
+  setCategories(val: State): void
 }
 
 const initialValues: Values = {
-  brandsIds: [],
-  setBrandsIds: noop,
-  categoryIds: [],
-  setCategoriesIds: noop,
+  brands: [],
+  setBrands: noop,
+  categories: [],
+  setCategories: noop,
 }
 
 const Context = createContext(initialValues)
@@ -29,29 +34,41 @@ interface Props {
 }
 
 export const FilterProvider = ({ children }: Props) => {
-  const [brandsIds, setIds] = useState<string[]>([])
-  const [categoryIds, setCIds] = useState<string[]>([])
+  const [brands, _setBrands] = useState<State[]>([])
+  const [categories, _setCategories] = useState<State[]>([])
 
-  const setCategoriesIds = useCallback((val: string) => {
-    setCIds((prev) =>
-      prev.includes(val) ? prev.filter((item) => item !== val) : [...prev, val],
-    )
+  const setCategories = useCallback((val: State) => {
+    _setCategories((prev) => {
+      const element = prev.find((el) => el.id === val.id)
+
+      if (element) {
+        return prev.filter((item) => item.id !== val.id)
+      }
+
+      return [...prev, val]
+    })
   }, [])
 
-  const setBrandsIds = useCallback((val: string) => {
-    setIds((prev) =>
-      prev.includes(val) ? prev.filter((item) => item !== val) : [...prev, val],
-    )
+  const setBrands = useCallback((val: State) => {
+    _setBrands((prev) => {
+      const element = prev.find((el) => el.id === val.id)
+
+      if (element) {
+        return prev.filter((item) => item.id !== val.id)
+      }
+
+      return [...prev, val]
+    })
   }, [])
 
   const value = useMemo(
     () => ({
-      brandsIds,
-      setBrandsIds,
-      categoryIds,
-      setCategoriesIds,
+      brands,
+      setBrands,
+      categories,
+      setCategories,
     }),
-    [brandsIds, categoryIds, setBrandsIds, setCategoriesIds],
+    [brands, categories, setBrands, setCategories],
   )
 
   return <Context.Provider value={value}>{children}</Context.Provider>
