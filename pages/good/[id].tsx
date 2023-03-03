@@ -45,7 +45,7 @@ export default function CurrentGoodPage() {
   )
 
   return (
-    <Layout  withAside={false} title={data?.good?.title ?? ''}>
+    <Layout withAside={false} title={data?.good?.title ?? ''}>
       {loading ? (
         <CircularProgress />
       ) : (

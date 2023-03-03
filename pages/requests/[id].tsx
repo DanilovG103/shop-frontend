@@ -12,10 +12,7 @@ export default function RequestPage() {
   })
 
   return (
-    <Layout
-      title={`Заказ №${query.id ?? ''}`}
-      withAside={false}
-      >
+    <Layout title={`Заказ №${query.id ?? ''}`} withAside={false}>
       <div />
     </Layout>
   )
