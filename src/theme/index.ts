@@ -18,13 +18,15 @@ export const muiTheme = createTheme({
       lg,
       xl,
     },
+    // For styled-system
+    xs: `${xs}px`,
+    sm: `${sm}px`,
+    md: `${md}px`,
+    lg: `${lg}px`,
+    xl: `${xl}px`,
   },
-})
-
-export const theme = {
   colors,
-  breakpoints: [xs, sm, md, lg, xl].map((el) => el.toString() + 'px'),
-}
+})
 
 export const globalStyles = css`
   * {

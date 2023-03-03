@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
-import { useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
-import { useMediaQuery } from '@mui/material'
+import { useMediaQuery, useTheme } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -57,11 +56,10 @@ export const Layout = ({
   withAside = true,
   withTitle = true,
 }: Props) => {
-  const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'))
+  const isMobile = useMediaQuery(muiTheme.breakpoints?.down?.('sm') ?? '')
   const { user, isAuthVisible, setIsAuthVisible } = useUserContext()
   const { pathname, push, beforePopState } = useRouter()
   const { colors } = useTheme()
-
   const onIconPress = useCallback(
     (route: string) => {
       if (!user) {
@@ -128,7 +126,9 @@ export const Layout = ({
         borderBottomColor="header_border"
         borderBottomStyle="solid"
         p="24px"
-        bg={['green', 'red', 'bg_primary']}>
+        bg={{ sm: 'red', xl: 'bg_primary' }}
+        // bg={['green', 'red', 'bg_primary']}
+      >
         <Box
           width="100%"
           display="flex"
@@ -157,13 +157,13 @@ export const Layout = ({
           </Box>
         </Box>
       </Box>
-      <Box display="flex" flexDirection={['column', 'column', 'row']} p="32px">
+      <Box display="flex" flexDirection={{ sm: 'column', xl: 'row' }} p="32px">
         {withAside && <Aside />}
         <Box
           m="0 auto"
           pl={withAside ? '12px' : '0'}
           width="100%"
-          maxWidth={['1140px']}>
+          maxWidth={'1140px'}>
           {withTitle && <Text>{title}</Text>}
           {children}
         </Box>

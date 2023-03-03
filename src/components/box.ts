@@ -1,4 +1,4 @@
-import styled from '@emotion/styled'
+import { styled } from '@mui/material'
 import {
   background,
   BackgroundProps,
@@ -34,7 +34,7 @@ export type BoxProps = GridProps &
   PositionProps &
   BackgroundProps
 
-export const Box = styled.div<BoxProps>`
+export const Box = styled('div')<BoxProps>`
   ${compose(
     grid,
     color,

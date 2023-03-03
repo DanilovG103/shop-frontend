@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react'
-import styled from '@emotion/styled'
+import { styled } from '@mui/material'
 import {
   color,
   ColorProps,
@@ -29,7 +29,7 @@ export type TextProps = ColorProps &
     cursor?: CSSProperties['cursor']
   }
 
-export const Text = styled.p<TextProps>`
+export const Text = styled('p')<TextProps>`
   cursor: ${({ cursor }) => cursor};
   ${compose(
     color,

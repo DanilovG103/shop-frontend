@@ -1,10 +1,27 @@
-import { theme } from 'src/theme'
+import type { BreakpointsOptions } from '@mui/material'
 
-type CustomTheme = typeof theme
+import { muiTheme } from 'src/theme'
 
 declare type Maybe<T> = T | null
 
-declare module '@emotion/react' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  export interface Theme extends CustomTheme {}
+type Colors = (typeof muiTheme)['colors']
+
+interface Breakpoints extends BreakpointsOptions {
+  xs: string
+  sm: string
+  lg: string
+  md: string
+  xl: string
+}
+
+declare module '@mui/material/styles' {
+  interface Theme {
+    colors: Colors
+    breakpoints: Breakpoints
+  }
+
+  interface ThemeOptions {
+    colors: Colors
+    breakpoints: Breakpoints
+  }
 }
