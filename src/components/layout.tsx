@@ -95,14 +95,17 @@ export const Layout = ({ title, children, withAside = true }: Props) => {
       {
         component: FavoriteIcon,
         onClick: onFavoriteClick,
+        name: 'favorite',
       },
       {
         component: CartIcon,
         onClick: onBasketClick,
+        name: 'basket',
       },
       {
         component: UserIcon,
         onClick: onUserClick,
+        name: 'user',
       },
     ],
     [onBasketClick, onFavoriteClick, onUserClick],
@@ -141,7 +144,7 @@ export const Layout = ({ title, children, withAside = true }: Props) => {
           </Links>
           <Box>
             {icons.map((item, i) => (
-              <IconButton key={i} onClick={item.onClick}>
+              <IconButton aria-label={item.name} key={i} onClick={item.onClick}>
                 <item.component color={colors.icons.primary} />
               </IconButton>
             ))}

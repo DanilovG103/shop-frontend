@@ -28,8 +28,27 @@ export default class MyDocument extends Document {
 
   render() {
     return (
-      <Html>
-        <Head />
+      <Html lang="ru">
+        <Head>
+          <meta
+            name="keywords"
+            content="одежда, мужская одежда, женская одежда, детская одежда, куртки, обувь, джинсы"
+          />
+          <meta
+            name="description"
+            content="Широкий ассортимент современной одежды самых разных размеров и стилей - и все это по очень доступным ценам. Ассортимент одежды, подходящей для взрослых и детей."
+          />
+          <meta
+            name="theme-color"
+            media="(prefers-color-scheme: light)"
+            content="white"
+          />
+          <meta
+            name="theme-color"
+            media="(prefers-color-scheme: dark)"
+            content="black"
+          />
+        </Head>
         <body>
           <Main />
           <NextScript />
