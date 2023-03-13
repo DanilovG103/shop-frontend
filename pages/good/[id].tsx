@@ -7,7 +7,7 @@ import { Button, CircularProgress, useTheme } from '@mui/material'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 
-import { Box, Layout, Text } from 'src/components'
+import { Box, Layout, Loader, Text } from 'src/components'
 import { useGood } from 'src/hooks'
 import { CartIcon, FavoriteIcon } from 'src/icons'
 import { env } from 'src/utils'
@@ -47,7 +47,7 @@ export default function CurrentGoodPage() {
   return (
     <Layout withAside={false} title={data?.good?.title ?? ''}>
       {loading ? (
-        <CircularProgress />
+        <Loader />
       ) : (
         <Box display="flex" flexDirection={{ sm: 'column', xl: 'row' }}>
           <Carousel width={600} showStatus={false}>

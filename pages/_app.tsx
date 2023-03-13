@@ -1,4 +1,5 @@
 import 'react-toastify/dist/ReactToastify.min.css'
+import 'react-phone-input-2/lib/material.css'
 
 import { ToastContainer } from 'react-toastify'
 import { ApolloProvider } from '@apollo/client'
@@ -30,7 +31,11 @@ export default function App({ Component, pageProps }: AppProps) {
               <main className={inter.className}>
                 <Component {...pageProps} />
               </main>
-              <ToastContainer hideProgressBar autoClose={1500} />
+              <ToastContainer
+                position="bottom-right"
+                hideProgressBar
+                autoClose={1500}
+              />
             </FilterProvider>
           </MuiThemeProvider>
         </CacheProvider>

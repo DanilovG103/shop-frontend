@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
 import { Formik, FormikConfig } from 'formik'
 
-import { CreateRequestForm, Layout } from 'src/components'
+import { CreateRequestForm, Layout, Text } from 'src/components'
 import { useUserContext } from 'src/context'
 import {
   RequestPaymentTypeType,
@@ -27,6 +27,7 @@ export default function CreateRequestPage() {
     () => ({
       address: '',
       paymentType: RequestPaymentTypeType.Receiving,
+      phone: '',
       recipientEmail: user?.email ?? '',
       recipientName: user?.name ?? '',
       sum: data?.basket?.sum ?? 0,
@@ -35,7 +36,7 @@ export default function CreateRequestPage() {
   )
 
   const handleSubmit: Submit = useCallback(
-    async (values, helpers) => {
+    async (values) => {
       if (!user) return
       await createRequest({
         variables: {
@@ -57,11 +58,13 @@ export default function CreateRequestPage() {
   )
 
   return (
-    <Layout title="Создание заказа" withAside={false}>
+    <Layout title="Оформление заказа" withAside={false}>
+      <Text as="h1">Оформление заказа</Text>
       <Formik
         initialValues={initialValues}
         onSubmit={handleSubmit}
         component={CreateRequestForm}
+        enableReinitialize
       />
     </Layout>
   )

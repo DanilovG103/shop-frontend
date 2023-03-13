@@ -3,11 +3,12 @@ import { gql } from '@apollo/client'
 import { goodsFragment } from '../fragments'
 
 gql`
-  query Requests($where: RequestWhereInput! = {}) {
-    requests(where: $where) {
+  query Requests($take: Int = 12, $skip: Int = 0) {
+    myRequests(take: $take, skip: $skip) {
       id
       status
       createdAt
+      sum
     }
   }
 `

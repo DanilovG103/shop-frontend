@@ -5,5 +5,6 @@ export interface CreateRequestValues {
   paymentType: RequestPaymentTypeType
   recipientEmail: string
   recipientName: string
+  phone: string
   sum: number
 }

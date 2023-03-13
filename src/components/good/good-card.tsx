@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { GoodsFragment } from 'src/generated/graphql'
 import { useGood } from 'src/hooks'
 import { FavoriteIcon } from 'src/icons'
-import { env } from 'src/utils'
+import { env, formatPrice } from 'src/utils'
 
 import { Box } from '../box'
 import { Text } from '../text'
@@ -87,7 +87,7 @@ export const Good = ({ good, displayType = 'default' }: Props) => {
           <Box ml={textContentMargin}>
             <Text>{good.title}</Text>
             <Text>{good.brand?.title}</Text>
-            <Text>{good.price?.toLocaleString('ru-RU') + ' ₽'}</Text>
+            <Text>{formatPrice(good.price ?? 0)}</Text>
           </Box>
         </Box>
       </Card>

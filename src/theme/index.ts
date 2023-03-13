@@ -34,10 +34,10 @@ export const globalStyles = css`
     padding: 0;
     box-sizing: border-box;
     list-style: none;
-    color: ${colors.text_primary};
   }
 
   a {
     text-decoration: none;
+    color: ${colors.text_primary};
   }
 `

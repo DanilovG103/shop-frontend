@@ -936,6 +936,7 @@ export type Query = {
   images?: Maybe<Array<Image>>;
   imagesCount?: Maybe<Scalars['Int']>;
   keystone: KeystoneMeta;
+  myRequests?: Maybe<Array<Maybe<Request>>>;
   request?: Maybe<Request>;
   requests?: Maybe<Array<Request>>;
   requestsCount?: Maybe<Scalars['Int']>;
@@ -1055,6 +1056,12 @@ export type QueryImagesArgs = {
 
 export type QueryImagesCountArgs = {
   where?: ImageWhereInput;
+};
+
+
+export type QueryMyRequestsArgs = {
+  skip: Scalars['Int'];
+  take: Scalars['Int'];
 };
 
 
@@ -1441,11 +1448,12 @@ export type FavoriteQueryVariables = Exact<{
 export type FavoriteQuery = { __typename?: 'Query', favorite?: { __typename?: 'Favorite', goodsCount?: number, goods?: Array<{ __typename?: 'Good', id: string, title?: string, price?: number, isInBasket?: boolean, isInFavorite?: boolean, brand?: { __typename?: 'Brand', title?: string }, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', id: string, url: string } }> }> } };
 
 export type RequestsQueryVariables = Exact<{
-  where?: RequestWhereInput;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
 }>;
 
 
-export type RequestsQuery = { __typename?: 'Query', requests?: Array<{ __typename?: 'Request', id: string, status?: RequestStatusType, createdAt?: any }> };
+export type RequestsQuery = { __typename?: 'Query', myRequests?: Array<{ __typename?: 'Request', id: string, status?: RequestStatusType, createdAt?: any, sum?: number }> };
 
 export type RequestByIdQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1990,11 +1998,12 @@ export type FavoriteQueryHookResult = ReturnType<typeof useFavoriteQuery>;
 export type FavoriteLazyQueryHookResult = ReturnType<typeof useFavoriteLazyQuery>;
 export type FavoriteQueryResult = Apollo.QueryResult<FavoriteQuery, FavoriteQueryVariables>;
 export const RequestsDocument = gql`
-    query Requests($where: RequestWhereInput! = {}) {
-  requests(where: $where) {
+    query Requests($take: Int = 12, $skip: Int = 0) {
+  myRequests(take: $take, skip: $skip) {
     id
     status
     createdAt
+    sum
   }
 }
     `;
@@ -2011,7 +2020,8 @@ export const RequestsDocument = gql`
  * @example
  * const { data, loading, error } = useRequestsQuery({
  *   variables: {
- *      where: // value for 'where'
+ *      take: // value for 'take'
+ *      skip: // value for 'skip'
  *   },
  * });
  */

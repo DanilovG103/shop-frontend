@@ -1,5 +1,5 @@
-import styled from '@emotion/styled'
-import Link from 'next/link'
+import { styled } from '@mui/material'
+import NextLink from 'next/link'
 
 import { Box, Good, Layout, Text } from 'src/components'
 import { useUserContext } from 'src/context'
@@ -11,6 +11,10 @@ const GoodsWrapper = styled(Box)`
   flex-direction: column;
   gap: 20px;
   width: 100%;
+`
+
+const Link = styled(NextLink)`
+  color: ${({ theme }) => theme.colors.link};
 `
 
 export default function BasketPage() {
@@ -42,7 +46,7 @@ export default function BasketPage() {
           )}
         </GoodsWrapper>
         {!!goods.length && (
-          <Box maxWidth="230px" width="100%">
+          <Box maxWidth="230px" width="100%" px="16px">
             <Link href={Route.request_create}>Оформить заказ</Link>
           </Box>
         )}

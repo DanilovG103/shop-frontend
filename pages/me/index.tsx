@@ -1,51 +1,30 @@
-import React from 'react'
-import { Card, styled } from '@mui/material'
-import Link from 'next/link'
+import React, { useState } from 'react'
+import { Box } from '@mui/system'
 
-import { Box, Layout, Text } from 'src/components'
-import { useUserContext } from 'src/context'
-import { useRequestsQuery } from 'src/generated'
-import { Route } from 'src/utils'
+import { Layout, MyRequests, ProfileAside, ProfileData } from 'src/components'
+import { ProfileSection } from 'src/types'
 
-const Wrapper = styled(Card)(() => ({
-  padding: '12px 16px',
-}))
+const component = {
+  [ProfileSection.REQUESTS]: MyRequests,
+  [ProfileSection.DATA]: ProfileData,
+}
 
 export default function MePage() {
-  const { user } = useUserContext()
-  const { data } = useRequestsQuery({
-    variables: {
-      where: {
-        user: {
-          id: {
-            equals: user?.id,
-          },
-        },
-      },
-    },
-  })
+  const [selectedSection, setSelectedSection] = useState(
+    ProfileSection.REQUESTS,
+  )
+
+  const Component = component[selectedSection]
 
   return (
     <Layout title="Мой профиль" withAside={false}>
-      {data?.requests?.map((item) => (
-        <Wrapper key={item.id}>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center">
-            <Text fontWeight="700" fontSize="22px">
-              Заказ №{item.id}
-            </Text>
-            <Text>{item.status}</Text>
-          </Box>
-          <Text fontWeight="700" fontSize="22px">
-            Создан: {item.createdAt}
-          </Text>
-          <Link href={`${Route.request}/${item.id}`}>
-            <Text>Детали заказа</Text>
-          </Link>
-        </Wrapper>
-      ))}
+      <Box display="flex" justifyContent="space-between">
+        <Component />
+        <ProfileAside
+          selectionSection={selectedSection}
+          setSelectedSection={setSelectedSection}
+        />
+      </Box>
     </Layout>
   )
 }
