@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import { Button } from '@mui/material'
 
 import { useUserContext } from 'src/context'
 
@@ -19,6 +20,7 @@ export const ProfileData = () => {
     <Form>
       <Input value={user.name} label="Имя Фамилия" />
       <Input value={user.email} type="email" label="E-mail" />
+      <Button variant="contained">Сохранить</Button>
     </Form>
   )
 }

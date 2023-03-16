@@ -18,12 +18,12 @@ export default function MePage() {
 
   return (
     <Layout title="Мой профиль" withAside={false}>
-      <Box display="flex" justifyContent="space-between">
-        <Component />
+      <Box display="flex">
         <ProfileAside
           selectionSection={selectedSection}
           setSelectedSection={setSelectedSection}
         />
+        <Component />
       </Box>
     </Layout>
   )

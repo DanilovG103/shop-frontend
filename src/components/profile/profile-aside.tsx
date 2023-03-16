@@ -23,7 +23,7 @@ const Wrapper = styled.aside`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  max-width: 300px;
+  max-width: 200px;
   width: 100%;
 `
 

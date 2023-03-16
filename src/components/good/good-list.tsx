@@ -16,7 +16,6 @@ const CardContainer = styled(Box)`
   flex-wrap: wrap;
   gap: 20px;
   width: 100%;
-  margin-top: 20px;
 `
 
 export const GoodList = ({ goods, fetchMore }: Props) => {

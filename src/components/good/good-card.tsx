@@ -72,7 +72,13 @@ export const Good = ({ good, displayType = 'default' }: Props) => {
       <Card>
         <Box p="16px" display="flex" flexDirection={containerDirection}>
           <ImageWrapper>
-            <Img src={imageUri} alt={'image'} width={200} height={200} />
+            <Img
+              priority
+              src={imageUri}
+              alt={'image'}
+              width={200}
+              height={200}
+            />
             {displayType === 'default' && (
               <IconsBox>
                 <IconWrapper onClick={onFavoriteClick}>

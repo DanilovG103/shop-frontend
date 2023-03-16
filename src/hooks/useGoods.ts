@@ -48,7 +48,7 @@ export const useGoods = ({ orderBy, where }: GoodsQueryVariables) => {
   })
 
   const fetchMore = useCallback(async () => {
-    if (!data?.goods || !countData) return
+    if (!data?.goods || !countData?.goodsCount) return
     if (data.goods.length === countData.goodsCount && loading) return
     await loadMore({
       variables: {
@@ -65,7 +65,7 @@ export const useGoods = ({ orderBy, where }: GoodsQueryVariables) => {
         }
       },
     })
-  }, [countData, data?.goods, loadMore, loading, whereInput])
+  }, [countData?.goodsCount, data?.goods, loadMore, loading, whereInput])
 
   return {
     data: data?.goods,

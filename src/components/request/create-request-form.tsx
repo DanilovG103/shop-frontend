@@ -111,7 +111,13 @@ export const CreateRequestForm = (props: FormikProps<CreateRequestValues>) => {
             if (!newValue) return
             setFieldValue('address', newValue)
           }}
-          renderInput={(params) => <Input label="Адрес доставки" {...params} />}
+          renderInput={(params) => (
+            <Input
+              label="Адрес доставки"
+              onBlur={({ target }) => setFieldValue('address', target.value)}
+              {...params}
+            />
+          )}
         />
         <Text>Тип оплаты</Text>
         <RadioGroup value={values.paymentType}>

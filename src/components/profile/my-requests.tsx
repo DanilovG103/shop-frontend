@@ -1,9 +1,15 @@
 import React from 'react'
-import { Card, styled } from '@mui/material'
+import { Card, Chip, styled } from '@mui/material'
 import Link from 'next/link'
 
-import { useRequestsQuery } from 'src/generated'
-import { formatPrice, formatRequestTime, Route } from 'src/utils'
+import { RequestStatusType, useRequestsQuery } from 'src/generated'
+import {
+  formatPrice,
+  formatRequestTime,
+  Route,
+  statuses,
+  statusesColor,
+} from 'src/utils'
 
 import { Box } from '../box'
 import { Loader } from '../loader'
@@ -22,26 +28,30 @@ export const MyRequests = () => {
   }
 
   return (
-    <Box px="16px" display="flex" flexDirection="column" width="100%">
-      {data.myRequests.map((item) => (
-        <Link key={item.id} href={`${Route.request}/${item.id}`}>
-          <Wrapper>
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center">
-              <Text fontWeight="700" fontSize="22px">
-                Заказ №{item.id}
+    <Box display="flex" flexDirection="column" width="100%">
+      {data.myRequests.map((item) => {
+        const status = item.status ?? RequestStatusType.Pending
+
+        return (
+          <Link key={item.id} href={`${Route.request}/${item.id}`}>
+            <Wrapper>
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center">
+                <Text fontWeight="700" fontSize="22px">
+                  Заказ №{item.id}
+                </Text>
+                <Chip color={statusesColor[status]} label={statuses[status]} />
+              </Box>
+              <Text fontSize="18px">
+                Создан: {formatRequestTime(item.createdAt)}
               </Text>
-              <Text>{item.status}</Text>
-            </Box>
-            <Text fontSize="18px">
-              Создан: {formatRequestTime(item.createdAt)}
-            </Text>
-            <Text fontSize="18px">Сумма: {formatPrice(item.sum ?? 0)}</Text>
-          </Wrapper>
-        </Link>
-      ))}
+              <Text fontSize="18px">Сумма: {formatPrice(item.sum ?? 0)}</Text>
+            </Wrapper>
+          </Link>
+        )
+      })}
     </Box>
   )
 }

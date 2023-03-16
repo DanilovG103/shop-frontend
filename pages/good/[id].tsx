@@ -53,6 +53,7 @@ export default function CurrentGoodPage() {
           <Carousel width={600} showStatus={false}>
             {data?.good?.images?.map((item) => (
               <Img
+                priority
                 key={item.image?.id}
                 src={env.image + item.image?.url ?? ''}
                 alt="image"
