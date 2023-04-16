@@ -75,7 +75,7 @@ export const Good = ({ good, displayType = 'default' }: Props) => {
             <Img
               priority
               src={imageUri}
-              alt={'image'}
+              alt={good?.title ?? 'image'}
               width={200}
               height={200}
             />

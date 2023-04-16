@@ -38,11 +38,17 @@ export const MyRequests = () => {
               <Box
                 display="flex"
                 justifyContent="space-between"
+                flexWrap="wrap"
                 alignItems="center">
                 <Text fontWeight="700" fontSize="22px">
                   Заказ №{item.id}
                 </Text>
-                <Chip color={statusesColor[status]} label={statuses[status]} />
+                <Box my={{ xs: '8px', md: '0px' }}>
+                  <Chip
+                    color={statusesColor[status]}
+                    label={statuses[status]}
+                  />
+                </Box>
               </Box>
               <Text fontSize="18px">
                 Создан: {formatRequestTime(item.createdAt)}

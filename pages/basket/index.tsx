@@ -33,7 +33,10 @@ export default function BasketPage() {
 
   return (
     <Layout title="Корзина" withAside={false}>
-      <Box display="flex" width="100%">
+      <Box
+        display="flex"
+        flexDirection={{ xs: 'column', md: 'row' }}
+        width="100%">
         <GoodsWrapper>
           {goods.length ? (
             goods.map((item) => (
@@ -46,7 +49,13 @@ export default function BasketPage() {
           )}
         </GoodsWrapper>
         {!!goods.length && (
-          <Box maxWidth="230px" width="100%" px="16px">
+          <Box
+            maxWidth={{ xs: 'none', md: '230px' }}
+            mt={{ xs: '16px', md: '0px' }}
+            display="flex"
+            justifyContent={{ xs: 'flex-end', md: 'flex-start' }}
+            width="100%"
+            px="16px">
             <Link href={Route.request_create}>Оформить заказ</Link>
           </Box>
         )}

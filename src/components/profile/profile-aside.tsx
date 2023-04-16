@@ -19,11 +19,9 @@ const SECTIONS = [
   },
 ]
 
-const Wrapper = styled.aside`
+const Wrapper = styled(Box)`
   display: flex;
-  flex-direction: column;
   gap: 16px;
-  max-width: 200px;
   width: 100%;
 `
 
@@ -42,13 +40,18 @@ export const ProfileAside = ({
   setSelectedSection,
 }: Props) => {
   return (
-    <Wrapper>
+    <Wrapper
+      maxWidth={{ xs: '230px', md: '200px' }}
+      as="aside"
+      flexDirection={{ xs: 'row', md: 'column' }}>
       {SECTIONS.map((item) => {
         const isSelected = selectionSection === item.value
 
         return (
           <Toggler
             key={item.value}
+            width="100%"
+            flexDirection={{ xs: 'column', md: 'row' }}
             onClick={() => setSelectedSection(item.value)}>
             {isSelected && (
               <Box
