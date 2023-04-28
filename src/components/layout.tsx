@@ -33,6 +33,7 @@ export const Layout = ({ title, children, withAside = true }: Props) => {
           mt={{ xs: '20px', md: '0px' }}
           pl={withAside ? '12px' : '0'}
           width="100%"
+          mx={{ xl: '0', xxl: 'auto' }}
           maxWidth={'1440px'}>
           {children}
         </Box>

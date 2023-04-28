@@ -8,6 +8,7 @@ const sm = 577
 const md = 769
 const lg = 1023
 const xl = 1231
+const xxl = 1920
 
 export const muiTheme = createTheme({
   breakpoints: {
@@ -17,6 +18,7 @@ export const muiTheme = createTheme({
       md,
       lg,
       xl,
+      xxl,
     },
     // For styled-system
     xs: `${xs}px`,
@@ -24,6 +26,7 @@ export const muiTheme = createTheme({
     md: `${md}px`,
     lg: `${lg}px`,
     xl: `${xl}px`,
+    xxl: `${xxl}px`,
   },
   colors,
 })

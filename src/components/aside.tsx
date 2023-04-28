@@ -67,7 +67,7 @@ export const Aside = () => {
     <Box
       display="flex"
       flexDirection={{ sm: 'row', md: 'column', xl: 'column' }}
-      maxWidth={{ sm: 'none', lg: '320px' }}
+      maxWidth={{ sm: 'none', lg: '320px', xxl: '360px' }}
       width="100%"
       alignItems="center"
       as="aside"

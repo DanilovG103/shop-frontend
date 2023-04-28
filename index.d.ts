@@ -12,6 +12,7 @@ interface Breakpoints extends BreakpointsOptions {
   lg: string
   md: string
   xl: string
+  xxl: string
 }
 
 declare module '@mui/material/styles' {
@@ -23,5 +24,9 @@ declare module '@mui/material/styles' {
   interface ThemeOptions {
     colors: Colors
     breakpoints: Breakpoints
+  }
+
+  interface BreakpointOverrides {
+    xxl: true
   }
 }
