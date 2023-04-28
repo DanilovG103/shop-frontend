@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import type { ApolloError } from '@apollo/client'
+import { type ApolloError, useApolloClient } from '@apollo/client'
 import { styled } from '@mui/material'
 import { Formik, FormikHelpers } from 'formik'
 
 import { useUserContext } from 'src/context'
 import {
   AuthMutationVariables,
+  GoodsDocument,
   RegistrationMutationVariables,
   useAuthMutation,
   useRegistrationMutation,
@@ -50,6 +51,7 @@ export const AuthModal = ({ open, onClose }: Props) => {
   const [auth] = useAuthMutation()
   const [register] = useRegistrationMutation()
   const { setUser } = useUserContext()
+  const client = useApolloClient()
 
   const authSubmit = async (
     values: AuthMutationVariables,
@@ -65,6 +67,9 @@ export const AuthModal = ({ open, onClose }: Props) => {
     ) {
       onClose()
       setUser(data.authenticateUserWithPassword.item)
+      client.refetchQueries({
+        include: [GoodsDocument],
+      })
     } else {
       helpers.setErrors(errors)
     }
