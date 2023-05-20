@@ -30,7 +30,7 @@ export const MyRequests = () => {
   return (
     <Box display="flex" flexDirection="column" width="100%">
       {data.myRequests.map((item) => {
-        const status = item.status ?? RequestStatusType.Pending
+        const status = item.status ?? RequestStatusType.Created
 
         return (
           <Link key={item.id} href={`${Route.request}/${item.id}`}>

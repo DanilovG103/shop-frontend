@@ -1,6 +1,7 @@
-import { blueGrey, pink } from '@mui/material/colors'
+import { blueGrey, pink, red } from '@mui/material/colors'
 
 export const colors = {
+  error: red[700],
   bg_primary: '#FFFFFF',
   text_primary: '#000000',
   header_border: 'rgba(0, 0, 0, 0.15)',

@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 import { userFragment } from '../fragments'
 
-const auth = gql`
+gql`
   ${userFragment}
   mutation Auth($email: String!, $password: String!) {
     authenticateUserWithPassword(email: $email, password: $password) {
@@ -20,7 +20,7 @@ const auth = gql`
   }
 `
 
-const register = gql`
+gql`
   ${userFragment}
   mutation Registration($email: String!, $password: String!, $name: String!) {
     registration(email: $email, name: $name, password: $password) {
@@ -30,6 +30,16 @@ const register = gql`
           ...user
         }
       }
+    }
+  }
+`
+
+gql`
+  mutation UserUpdate($where: UserWhereUniqueInput!, $data: UserUpdateInput!) {
+    updateUser(where: $where, data: $data) {
+      id
+      name
+      email
     }
   }
 `

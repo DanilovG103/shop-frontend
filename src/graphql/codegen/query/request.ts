@@ -19,6 +19,8 @@ gql`
     request(where: { id: $id }) {
       id
       status
+      sum
+      rejectReason
       goods {
         ...goods
       }

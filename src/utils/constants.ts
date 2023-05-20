@@ -1,10 +1,10 @@
 import { RequestStatusType } from 'src/generated'
 
 export const statuses = {
-  [RequestStatusType.Cancelled]: 'Отменен',
-  [RequestStatusType.Delivered]: 'Доставлен',
+  [RequestStatusType.Created]: 'Создан',
   [RequestStatusType.Fulfilled]: 'Принят',
-  [RequestStatusType.Pending]: 'Ожидание',
+  [RequestStatusType.Delivered]: 'Доставлен',
+  [RequestStatusType.Cancelled]: 'Отменен',
   [RequestStatusType.Rejected]: 'Отклонен',
 }
 
@@ -12,6 +12,6 @@ export const statusesColor = {
   [RequestStatusType.Cancelled]: 'error',
   [RequestStatusType.Delivered]: 'info',
   [RequestStatusType.Fulfilled]: 'success',
-  [RequestStatusType.Pending]: 'warning',
+  [RequestStatusType.Created]: 'warning',
   [RequestStatusType.Rejected]: 'error',
 } as const

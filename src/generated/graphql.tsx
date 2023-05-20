@@ -1176,9 +1176,9 @@ export type RequestPaymentTypeTypeNullableFilter = {
 
 export enum RequestStatusType {
   Cancelled = 'CANCELLED',
+  Created = 'CREATED',
   Delivered = 'DELIVERED',
   Fulfilled = 'FULFILLED',
-  Pending = 'PENDING',
   Rejected = 'REJECTED'
 }
 
@@ -1370,6 +1370,14 @@ export type RequestMutationVariables = Exact<{
 
 export type RequestMutation = { __typename?: 'Mutation', createRequest?: { __typename?: 'Request', id: string } };
 
+export type UpdateRequestMutationVariables = Exact<{
+  where: RequestWhereUniqueInput;
+  data: RequestUpdateInput;
+}>;
+
+
+export type UpdateRequestMutation = { __typename?: 'Mutation', updateRequest?: { __typename?: 'Request', id: string } };
+
 export type AuthMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
@@ -1386,6 +1394,14 @@ export type RegistrationMutationVariables = Exact<{
 
 
 export type RegistrationMutation = { __typename?: 'Mutation', registration?: { __typename?: 'UserAuthenticationWithPasswordFailure' } | { __typename?: 'UserAuthenticationWithPasswordSuccess', sessionToken: string, item: { __typename?: 'User', id: string, name?: string, email?: string, basketId?: string, favoritesId?: string } } };
+
+export type UserUpdateMutationVariables = Exact<{
+  where: UserWhereUniqueInput;
+  data: UserUpdateInput;
+}>;
+
+
+export type UserUpdateMutation = { __typename?: 'Mutation', updateUser?: { __typename?: 'User', id: string, name?: string, email?: string } };
 
 export type AddressesQueryVariables = Exact<{
   query?: InputMaybe<Scalars['String']>;
@@ -1460,7 +1476,7 @@ export type RequestByIdQueryVariables = Exact<{
 }>;
 
 
-export type RequestByIdQuery = { __typename?: 'Query', request?: { __typename?: 'Request', id: string, status?: RequestStatusType, goodsCount?: number, createdAt?: any, goods?: Array<{ __typename?: 'Good', id: string, title?: string, price?: number, isInBasket?: boolean, isInFavorite?: boolean, brand?: { __typename?: 'Brand', title?: string }, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', id: string, url: string } }> }> } };
+export type RequestByIdQuery = { __typename?: 'Query', request?: { __typename?: 'Request', id: string, status?: RequestStatusType, sum?: number, rejectReason?: string, goodsCount?: number, createdAt?: any, goods?: Array<{ __typename?: 'Good', id: string, title?: string, price?: number, isInBasket?: boolean, isInFavorite?: boolean, brand?: { __typename?: 'Brand', title?: string }, images?: Array<{ __typename?: 'Image', image?: { __typename?: 'ImageFieldOutput', id: string, url: string } }> }> } };
 
 export const GoodsFragmentDoc = gql`
     fragment goods on Good {
@@ -1590,6 +1606,40 @@ export function useRequestMutation(baseOptions?: Apollo.MutationHookOptions<Requ
 export type RequestMutationHookResult = ReturnType<typeof useRequestMutation>;
 export type RequestMutationResult = Apollo.MutationResult<RequestMutation>;
 export type RequestMutationOptions = Apollo.BaseMutationOptions<RequestMutation, RequestMutationVariables>;
+export const UpdateRequestDocument = gql`
+    mutation UpdateRequest($where: RequestWhereUniqueInput!, $data: RequestUpdateInput!) {
+  updateRequest(where: $where, data: $data) {
+    id
+  }
+}
+    `;
+export type UpdateRequestMutationFn = Apollo.MutationFunction<UpdateRequestMutation, UpdateRequestMutationVariables>;
+
+/**
+ * __useUpdateRequestMutation__
+ *
+ * To run a mutation, you first call `useUpdateRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateRequestMutation, { data, loading, error }] = useUpdateRequestMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateRequestMutation(baseOptions?: Apollo.MutationHookOptions<UpdateRequestMutation, UpdateRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateRequestMutation, UpdateRequestMutationVariables>(UpdateRequestDocument, options);
+      }
+export type UpdateRequestMutationHookResult = ReturnType<typeof useUpdateRequestMutation>;
+export type UpdateRequestMutationResult = Apollo.MutationResult<UpdateRequestMutation>;
+export type UpdateRequestMutationOptions = Apollo.BaseMutationOptions<UpdateRequestMutation, UpdateRequestMutationVariables>;
 export const AuthDocument = gql`
     mutation Auth($email: String!, $password: String!) {
   authenticateUserWithPassword(email: $email, password: $password) {
@@ -1672,6 +1722,42 @@ export function useRegistrationMutation(baseOptions?: Apollo.MutationHookOptions
 export type RegistrationMutationHookResult = ReturnType<typeof useRegistrationMutation>;
 export type RegistrationMutationResult = Apollo.MutationResult<RegistrationMutation>;
 export type RegistrationMutationOptions = Apollo.BaseMutationOptions<RegistrationMutation, RegistrationMutationVariables>;
+export const UserUpdateDocument = gql`
+    mutation UserUpdate($where: UserWhereUniqueInput!, $data: UserUpdateInput!) {
+  updateUser(where: $where, data: $data) {
+    id
+    name
+    email
+  }
+}
+    `;
+export type UserUpdateMutationFn = Apollo.MutationFunction<UserUpdateMutation, UserUpdateMutationVariables>;
+
+/**
+ * __useUserUpdateMutation__
+ *
+ * To run a mutation, you first call `useUserUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUserUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [userUpdateMutation, { data, loading, error }] = useUserUpdateMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUserUpdateMutation(baseOptions?: Apollo.MutationHookOptions<UserUpdateMutation, UserUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UserUpdateMutation, UserUpdateMutationVariables>(UserUpdateDocument, options);
+      }
+export type UserUpdateMutationHookResult = ReturnType<typeof useUserUpdateMutation>;
+export type UserUpdateMutationResult = Apollo.MutationResult<UserUpdateMutation>;
+export type UserUpdateMutationOptions = Apollo.BaseMutationOptions<UserUpdateMutation, UserUpdateMutationVariables>;
 export const AddressesDocument = gql`
     query Addresses($query: String) {
   addresses(query: $query) {
@@ -2041,6 +2127,8 @@ export const RequestByIdDocument = gql`
   request(where: {id: $id}) {
     id
     status
+    sum
+    rejectReason
     goods {
       ...goods
     }

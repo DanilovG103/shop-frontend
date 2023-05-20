@@ -7,3 +7,14 @@ gql`
     }
   }
 `
+
+gql`
+  mutation UpdateRequest(
+    $where: RequestWhereUniqueInput!
+    $data: RequestUpdateInput!
+  ) {
+    updateRequest(where: $where, data: $data) {
+      id
+    }
+  }
+`
