@@ -1,18 +1,15 @@
-import { useCallback } from 'react'
 import { Button } from '@mui/material'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import { Box, Layout, Text } from 'src/components'
+import { Box, Layout, Stepper, Text } from 'src/components'
 import {
   RequestStatusType,
   useRequestByIdQuery,
   useUpdateRequestMutation,
 } from 'src/generated'
 import { env, formatPrice } from 'src/utils'
-
-import { Stepper } from './ui/stepper'
 
 export default function RequestPage() {
   const { query, replace } = useRouter()
